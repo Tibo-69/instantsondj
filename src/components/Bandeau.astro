@@ -1,0 +1,58 @@
+---
+// src/components/Bandeau.astro — chiffres clés + zones, en bas du haut de page.
+const chiffres = [
+  { haut: 'Depuis 2019', bas: 'DJ-animateur', ico: 'casque' },
+  { haut: 'UCPA', bas: 'Formation DJ', ico: 'diplome' },
+  { haut: '+320', bas: 'Événements réalisés', ico: 'etoile' },
+  { haut: '+60', bas: 'Mariages', ico: 'coeur' },
+];
+const zones = ['Rhône', 'Ain', 'Isère', 'Drôme'];
+const icones: Record<string, string> = {
+  casque: '<path d="M3 14v-2a9 9 0 0 1 18 0v2"/><path d="M21 15a2 2 0 0 1-2 2h-1v-6h1a2 2 0 0 1 2 2zM3 15a2 2 0 0 0 2 2h1v-6H5a2 2 0 0 0-2 2z"/>',
+  diplome: '<path d="M2 9.5 12 4.5l10 5-10 5z"/><path d="M6 11.5V16c0 1.5 2.7 3 6 3s6-1.5 6-3v-4.5"/><path d="M22 9.5V15"/>',
+  etoile: '<path d="m12 2.8 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2-5.6-2.9-5.6 2.9 1.1-6.2L3 9.4l6.2-.9z"/>',
+  coeur: '<path d="M12 20.5s-8-5.2-8-10.7a4.5 4.5 0 0 1 8-2.8 4.5 4.5 0 0 1 8 2.8c0 5.5-8 10.7-8 10.7z"/>',
+};
+---
+<div class="bandeau">
+  <div class="container chiffres">
+    {chiffres.map((c) => (
+      <div class="chiffre">
+        <span class="rond"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" set:html={icones[c.ico]} /></span>
+        <span class="txt">{c.haut}<small>{c.bas}</small></span>
+      </div>
+    ))}
+  </div>
+  <div class="zones">
+    <span class="label">J’INTERVIENS DANS LE</span>
+    <span class="liste">{zones.map((z, i) => <>{i > 0 && <i>·</i>}<b>{z}</b></>)}</span>
+    <span class="voisins">et départements voisins</span>
+  </div>
+</div>
+
+<style>
+  .bandeau { background: linear-gradient(180deg, rgba(18,13,9,.4) 0%, rgba(18,13,9,.85) 100%); color: #fff; }
+  .chiffres { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; padding-top: 14px; padding-bottom: 16px; border-top: 1px solid rgba(219,167,100,.35); }
+  .chiffre { display: flex; align-items: center; gap: 10px; }
+  .rond { width: 40px; height: 40px; flex-shrink: 0; border: 1px solid var(--gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+  .txt { font-size: 16px; line-height: 1.2; display: flex; flex-direction: column; }
+  .txt small { font-size: 13px; color: rgba(255,255,255,.85); }
+  .zones { background: #2b2723; padding: 14px var(--gutter); display: flex; flex-direction: column; align-items: center; gap: 8px; text-align: center; }
+  .label { font-size: 11px; letter-spacing: 1.5px; color: var(--gold); }
+  .liste { display: flex; gap: 14px; font-size: 16px; }
+  .liste b { font-weight: 400; }
+  .liste i { font-style: normal; color: var(--gold); }
+  .voisins { font-size: 13px; color: rgba(255,255,255,.75); }
+
+  @media (min-width: 1200px) {
+    .chiffres { grid-template-columns: repeat(4, minmax(0, 1fr)); padding-top: 24px; padding-bottom: 24px; border-top: 0; }
+    .chiffre { justify-content: center; gap: 16px; padding: 12px 16px; border-right: 1px solid var(--gold); }
+    .chiffre:last-child { border-right: 0; }
+    .rond { width: 52px; height: 52px; }
+    .txt { font-size: 20px; }
+    .txt small { font-size: 20px; color: #fff; }
+    .zones { flex-direction: row; justify-content: center; gap: 24px; height: 56px; padding-top: 0; padding-bottom: 0; }
+    .liste { font-size: 18px; gap: 24px; }
+    .voisins { font-size: 18px; color: #fff; }
+  }
+</style>

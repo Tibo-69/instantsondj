@@ -1,0 +1,23 @@
+---
+// src/components/CtaDevis.astro — bloc final « Une date en tête ? ».
+---
+<section class="section cta">
+  <div class="container inner">
+    <span class="trait" aria-hidden="true"></span>
+    <h2 class="titre">Une date en tête ?</h2>
+    <p>Une soirée, un événement ou un projet en préparation ? Échangeons autour de votre prochaine date.</p>
+    <div class="boutons">
+      <a class="btn btn-dark" href="/devis">DEMANDER UN DEVIS</a>
+      <a class="btn btn-outline" href="/tarifs">VOIR LES TARIFS</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .inner { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 20px; }
+  .trait { width: 60px; height: 1px; background: var(--gold); }
+  .titre { font-size: 36px; }
+  .inner p { max-width: 560px; font-size: 16px; color: var(--text); }
+  .boutons { width: 100%; display: flex; flex-direction: column; gap: 12px; margin-top: 8px; }
+  @media (min-width: 768px) { .boutons { width: auto; flex-direction: row; } .titre { font-size: 44px; } }
+</style>

@@ -1,0 +1,100 @@
+---
+// src/components/Header.astro — barre du haut.
+// Ordinateur : logo + menu (Mariage a un sous-menu au survol) + bouton devis.
+// Mobile / tablette : logo + bouton menu qui ouvre un panneau plein écran.
+// Pas de framework : le menu mobile utilise <details>, le sous-menu du CSS.
+import { menu, site } from '../data/site';
+
+interface Props { page?: string }
+const { page = '' } = Astro.props;
+// Pour souligner la page active dans le menu
+const actif = (href: string) => Astro.url.pathname.startsWith(href) && href !== '/';
+---
+<header class="header">
+  <div class="container bar">
+    <a class="logo" href="/" aria-label="DJ Tiako, accueil">
+      <span class="logo-nom">DJ Tiako</span><span class="logo-sub">/ AUDIO</span>
+    </a>
+
+    <!-- Menu ordinateur -->
+    <nav class="nav-desktop" aria-label="Menu principal">
+      <ul>
+        {menu.map((item) => (
+          <li class={item.enfants ? 'has-sub' : ''}>
+            <a href={item.href} class={actif(item.href) ? 'actif' : ''}>
+              {item.label}
+              {item.enfants && <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>}
+            </a>
+            {item.enfants && (
+              <ul class="sub">
+                {item.enfants.map((e) => <li><a href={e.href}>{e.label}</a></li>)}
+              </ul>
+            )}
+          </li>
+        ))}
+      </ul>
+    </nav>
+    <a class="btn btn-dark cta-desktop" href="/devis">DEMANDER UN DEVIS</a>
+
+    <!-- Menu mobile / tablette -->
+    <details class="nav-mobile">
+      <summary aria-label="Ouvrir le menu">
+        <svg class="ico-open" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 7h18M3 12h18M3 17h18"/></svg>
+        <svg class="ico-close" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+      </summary>
+      <div class="panel">
+        <nav aria-label="Menu mobile">
+          {menu.map((item) => (
+            <>
+              <a class="m-item" href={item.href}>{item.label}<span aria-hidden="true">⟶</span></a>
+              {item.enfants && item.enfants.slice(1).map((e) => <a class="m-sub" href={e.href}>{e.label}</a>)}
+            </>
+          ))}
+        </nav>
+        <div class="m-cta">
+          <a class="btn btn-dark" href="/devis">DEMANDER UN DEVIS</a>
+          <a class="btn btn-outline" href={site.telLien}>{site.telAffiche}</a>
+        </div>
+      </div>
+    </details>
+  </div>
+</header>
+
+<style>
+  .header { position: sticky; top: 0; z-index: 50; background: var(--cream); border-bottom: 1px solid var(--line); }
+  .bar { height: 64px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+  .logo { display: flex; align-items: baseline; gap: 8px; text-decoration: none; color: var(--ink); }
+  .logo-nom { font-family: var(--serif); font-size: 22px; font-weight: 600; }
+  .logo-sub { font-size: 11px; letter-spacing: .5px; color: #8a8a8a; }
+
+  /* Ordinateur */
+  .nav-desktop, .cta-desktop { display: none; }
+  .nav-desktop > ul { display: flex; gap: 40px; margin: 0; padding: 0; list-style: none; }
+  .nav-desktop a { display: flex; align-items: center; gap: 6px; min-height: 44px; font-size: 13px; letter-spacing: 1px; text-transform: uppercase; text-decoration: none; color: #555; border-bottom: 1px solid transparent; }
+  .nav-desktop a.actif { color: var(--ink); border-bottom-color: var(--gold); }
+  .has-sub { position: relative; }
+  .sub { position: absolute; top: 100%; left: -16px; min-width: 230px; margin: 0; padding: 8px 0; list-style: none; background: #fff; border: 1px solid var(--line); box-shadow: 0 12px 30px rgba(0,0,0,.08); opacity: 0; visibility: hidden; transform: translateY(6px); transition: .15s; }
+  .sub a { padding: 0 20px; text-transform: none; letter-spacing: 0; font-size: 14px; border: 0; }
+  .has-sub:hover .sub, .has-sub:focus-within .sub { opacity: 1; visibility: visible; transform: none; }
+
+  /* Mobile */
+  .nav-mobile summary { list-style: none; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+  .nav-mobile summary::-webkit-details-marker { display: none; }
+  .ico-close { display: none; }
+  .nav-mobile[open] .ico-open { display: none; }
+  .nav-mobile[open] .ico-close { display: block; }
+  .panel { position: fixed; inset: 64px 0 0 0; background: var(--cream); padding: 24px var(--gutter) 40px; overflow-y: auto; display: flex; flex-direction: column; gap: 32px; }
+  .panel nav { display: flex; flex-direction: column; }
+  .m-item { display: flex; justify-content: space-between; align-items: center; min-height: 64px; border-bottom: 1px solid var(--line); font-family: var(--serif); font-size: 30px; text-decoration: none; color: #333; }
+  .m-item span { font-size: 18px; color: var(--gold-text); }
+  .m-sub { padding: 12px 0 12px 24px; font-family: var(--serif); font-size: 22px; color: #555; text-decoration: none; }
+  .m-cta { display: flex; flex-direction: column; gap: 12px; }
+
+  @media (min-width: 768px) { .bar { height: 80px; } .panel { inset: 80px 0 0 0; } }
+  @media (min-width: 1200px) {
+    .bar { height: 100px; }
+    .logo-nom { font-size: 26px; }
+    .nav-desktop, .cta-desktop { display: flex; }
+    .nav-mobile { display: none; }
+  }
+</style>

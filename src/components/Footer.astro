@@ -1,0 +1,76 @@
+---
+// src/components/Footer.astro — pied de page commun.
+import { menu, site } from '../data/site';
+const annee = new Date().getFullYear();
+---
+<footer class="footer">
+  <div class="container inner">
+    <div class="brand">
+      <span class="logo"><span class="logo-nom">DJ Tiako</span><span class="logo-sub">/ AUDIO</span></span>
+      <p class="gris">DJ mariage &amp; événementiel à Lyon, Besançon et alentours</p>
+      <p class="gris zones">{site.zones.join(' • ')}</p>
+      <div class="ronds">
+        <a href={site.instagram} target="_blank" rel="noopener" aria-label="Instagram">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".8" fill="currentColor"/></svg>
+        </a>
+        <a href={site.whatsapp} target="_blank" rel="noopener" aria-label="WhatsApp">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 20.5l1.4-4.2A8.5 8.5 0 1 1 8 19.3z"/><path d="M9 8.8c0 3.4 2.8 6.2 6.2 6.2l.9-1.6-2-1-1 .8a3.6 3.6 0 0 1-1.9-1.9l.8-1-1-2z"/></svg>
+        </a>
+        <a href={site.telLien} aria-label="Appeler">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <div class="cols">
+      <nav aria-label="Navigation du pied de page">
+        <span class="titre">NAVIGATION</span>
+        {menu.map((item) => (
+          <>
+            <a href={item.href}>{item.label}</a>
+            {item.enfants && item.enfants.slice(1).map((e) => <a class="sub" href={e.href}>{e.label}</a>)}
+          </>
+        ))}
+      </nav>
+      <div>
+        <span class="titre">CONTACT</span>
+        <a href={site.telLien}>{site.telAffiche}</a>
+        <a class="mail" href={`mailto:${site.email}`}>{site.email}</a>
+        <a href={site.instagram} target="_blank" rel="noopener">Instagram</a>
+        <a href="/devis">Demander un devis</a>
+      </div>
+    </div>
+  </div>
+  <div class="container bas">
+    © {annee} DJ Tiako · <a href="/mentions-legales">Mentions légales</a> · <a href="/confidentialite">Politique de confidentialité</a>
+  </div>
+</footer>
+
+<style>
+  .footer { background: var(--ink); color: #fff; padding: 48px 0 32px; }
+  .inner { display: flex; flex-direction: column; gap: 36px; }
+  .brand { display: flex; flex-direction: column; gap: 12px; }
+  .logo { display: flex; align-items: baseline; gap: 8px; }
+  .logo-nom { font-family: var(--serif); font-size: 32px; font-weight: 600; }
+  .logo-sub { font-size: 12px; color: #8f8f8f; }
+  .gris { color: #8f8f8f; font-size: 15px; line-height: 1.6; }
+  .zones { font-size: 14px; }
+  .ronds { display: flex; gap: 12px; margin-top: 4px; }
+  .ronds a { width: 44px; height: 44px; border: 1px solid #3a3a3a; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; }
+  .cols { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+  .cols > * { display: flex; flex-direction: column; }
+  .cols a { color: #fff; text-decoration: none; font-size: 14px; padding: 8px 0; }
+  .cols a:hover { color: var(--gold); }
+  .cols a.sub { color: #bdbdbd; font-size: 13px; padding-left: 14px; }
+  .mail { white-space: nowrap; font-size: 13px !important; }
+  .titre { font-size: 11px; font-weight: 600; letter-spacing: .5px; color: #d9c3a5; margin-bottom: 8px; }
+  .bas { margin-top: 36px; padding-top: 24px; border-top: 1px solid #262626; font-size: 12px; color: #8f8f8f; }
+  .bas a { color: #8f8f8f; }
+
+  @media (min-width: 768px) {
+    .inner { flex-direction: row; justify-content: space-between; gap: 40px; }
+    .brand { flex: 1 1 0; }
+    .cols { display: flex; gap: 48px; flex-shrink: 0; }
+  }
+  @media (min-width: 1200px) { .footer { padding: 80px 0 48px; } .gris { font-size: 16px; } .cols { gap: 64px; } }
+</style>

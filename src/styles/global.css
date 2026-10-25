@@ -1,0 +1,106 @@
+/* =========================================================
+   global.css — styles communs à tout le site DJ Tiako
+   Les "tokens" (couleurs, typos, espacements) viennent du
+   design system de la maquette. Change-les ici : tout suit.
+   ========================================================= */
+
+:root {
+  /* Couleurs */
+  --ink: #111111;          /* texte principal, boutons noirs */
+  --text: #333333;         /* texte courant */
+  --muted: #6b6b6b;        /* texte secondaire */
+  --gold: #dba764;         /* doré : traits, accents, fonds */
+  --gold-text: #9a6f35;    /* doré lisible pour du texte sur fond clair */
+  --cream: #f8f7f4;        /* fond beige des sections */
+  --cream-2: #f8f4ee;      /* beige plus chaud (arche, encarts) */
+  --line: #e8e4de;         /* bordures fines */
+  --card-line: #eee3d6;    /* bordures des cartes */
+  --night: #141110;        /* brun nuit (sections sombres) */
+
+  /* Typographies */
+  --serif: 'Cormorant Garamond', Georgia, serif;
+  --sans: 'Schibsted Grotesk', system-ui, sans-serif;
+
+  /* Marges latérales selon l'écran (mobile par défaut) */
+  --gutter: 20px;
+  --section-y: 56px;
+}
+
+/* Tablette */
+@media (min-width: 768px) {
+  :root { --gutter: 40px; --section-y: 72px; }
+}
+/* Ordinateur */
+@media (min-width: 1200px) {
+  :root { --gutter: 80px; --section-y: 96px; }
+}
+
+/* --- Base --- */
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  font-family: var(--sans);
+  color: var(--ink);
+  background: #ffffff;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+img { display: block; max-width: 100%; height: auto; }
+a { color: inherit; }
+a:hover { color: var(--gold-text); }
+h1, h2, h3 { font-family: var(--serif); font-weight: 400; margin: 0; line-height: 1.15; }
+p { margin: 0; }
+
+/* Conteneur : largeur max 1440 px, centré, avec les marges latérales */
+.container {
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding-left: var(--gutter);
+  padding-right: var(--gutter);
+}
+.section { padding-top: var(--section-y); padding-bottom: var(--section-y); }
+.bg-cream { background: var(--cream); }
+
+/* --- Petit titre doré avec un trait (« eyebrow ») --- */
+.eyebrow {
+  display: flex; align-items: center; gap: 16px;
+  font-family: var(--serif); font-size: 20px; color: var(--gold-text);
+}
+.eyebrow::before { content: ''; width: 32px; height: 1px; background: var(--gold); flex-shrink: 0; }
+.eyebrow.center { justify-content: center; }
+.eyebrow.center::after { content: ''; width: 32px; height: 1px; background: var(--gold); }
+@media (min-width: 768px) { .eyebrow { font-size: 24px; } .eyebrow::before, .eyebrow.center::after { width: 56px; } }
+@media (min-width: 1200px) { .eyebrow { font-size: 28px; } .eyebrow::before, .eyebrow.center::after { width: 66px; } }
+
+.h2 { font-size: 30px; }
+@media (min-width: 768px) { .h2 { font-size: 36px; } }
+@media (min-width: 1200px) { .h2 { font-size: 40px; } }
+
+/* --- Boutons --- */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+  height: 48px; padding: 0 30px;
+  font-family: var(--sans); font-size: 13px; font-weight: 500; letter-spacing: 1.5px;
+  text-decoration: none; border: 1px solid transparent; border-radius: 0; cursor: pointer;
+  transition: background .15s, color .15s, border-color .15s;
+}
+.btn-dark { background: var(--ink); color: #fff; border-color: #8c6a3e; }
+.btn-dark:hover { background: var(--gold); color: var(--ink); }
+.btn-light { background: transparent; color: #fff; border-color: #fff; }
+.btn-light:hover { border-color: var(--gold); color: var(--gold); }
+.btn-outline { background: transparent; color: var(--ink); border-color: var(--ink); }
+.btn-outline:hover { background: var(--ink); color: #fff; }
+
+/* Lien flèche « EN SAVOIR PLUS ⟶ » */
+.link-arrow {
+  display: inline-flex; align-items: center; gap: 12px; min-height: 44px;
+  font-size: 13px; font-weight: 500; letter-spacing: 1px; color: var(--ink);
+}
+
+/* Accessibilité : texte lu par les lecteurs d'écran mais invisible */
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* Focus clavier visible (accessibilité) */
+:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }

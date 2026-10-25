@@ -1,0 +1,28 @@
+---
+// src/components/BarreMobile.astro — barre fixe en bas de l'écran (mobile seulement).
+// Elle apparaît quand on a dépassé les boutons du haut de page
+// (élément marqué data-hero-cta). Petit script en bas du fichier.
+import { site } from '../data/site';
+---
+<div class="barre" data-barre hidden>
+  <a class="btn btn-light" href={site.telLien}>APPELER</a>
+  <a class="btn devis" href="/devis">DEMANDER UN DEVIS</a>
+</div>
+
+<style>
+  .barre { position: fixed; left: 0; right: 0; bottom: 0; z-index: 40; padding: 10px 12px; background: rgba(17,17,17,.96); display: grid; grid-template-columns: 1fr 1fr; gap: 10px; box-shadow: 0 -8px 24px rgba(0,0,0,.18); }
+  .barre[hidden] { display: none; }
+  .barre .btn { padding: 0 8px; letter-spacing: .5px; }
+  .devis { background: var(--gold); color: var(--ink); font-weight: 600; }
+  @media (min-width: 768px) { .barre { display: none !important; } }
+</style>
+
+<script>
+  // Affiche la barre quand les boutons du haut de page ne sont plus visibles
+  const barre = document.querySelector<HTMLElement>('[data-barre]');
+  const cta = document.querySelector('[data-hero-cta]');
+  if (barre && cta) {
+    new IntersectionObserver(([e]) => { barre.hidden = e.isIntersecting || e.boundingClientRect.top > 0; })
+      .observe(cta);
+  }
+</script>

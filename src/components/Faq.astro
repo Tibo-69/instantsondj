@@ -1,0 +1,47 @@
+---
+// src/components/Faq.astro — FAQ en accordéon (<details>, sans JavaScript).
+// Utilisation : <Faq questions={faqGenerale} />
+// Bonus SEO : on n'ajoute pas de balisage FAQPage (Google ne l'affiche plus).
+import type { Question } from '../data/faq';
+interface Props { questions: Question[] }
+const { questions } = Astro.props;
+---
+<section class="section faq" aria-labelledby="faq-titre">
+  <div class="container grille">
+    <div class="tete">
+      <span class="eyebrow">Questions fréquentes</span>
+      <h2 id="faq-titre" class="titre">Vous vous posez<br />des questions ?</h2>
+      <p>Les réponses aux questions que l’on me pose le plus souvent.</p>
+    </div>
+    <div class="liste">
+      {questions.map((item, i) => (
+        <details open={i === 0}>
+          <summary>
+            <span class="q">{item.q}</span>
+            <span class="ico" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
+          </summary>
+          <div class="r">{item.r.map((p) => <p>{p}</p>)}</div>
+        </details>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .faq { border-top: 1px solid var(--line); }
+  .grille { display: flex; flex-direction: column; gap: 28px; }
+  .tete { display: flex; flex-direction: column; gap: 14px; }
+  .titre { font-size: 32px; line-height: 1.1; }
+  .tete p { font-size: 15px; color: var(--text); }
+  .liste { border-top: 1px solid var(--line); }
+  details { border-bottom: 1px solid var(--line); }
+  summary { list-style: none; cursor: pointer; min-height: 64px; padding: 18px 0; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+  summary::-webkit-details-marker { display: none; }
+  .q { font-family: var(--serif); font-size: 21px; line-height: 1.25; }
+  summary:hover .q { color: var(--gold-text); }
+  .ico { flex-shrink: 0; width: 36px; height: 36px; border: 1px solid var(--gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: transform .15s; }
+  details[open] .ico { background: var(--ink); border-color: var(--ink); color: #fff; transform: rotate(45deg); }
+  .r { padding: 0 0 24px; display: flex; flex-direction: column; gap: 12px; font-size: 15px; line-height: 1.7; color: var(--text); }
+  @media (min-width: 768px) { .titre { font-size: 38px; } .q { font-size: 24px; } .r { padding-right: 56px; font-size: 16px; } .tete p { font-size: 16px; } }
+  @media (min-width: 1200px) { .grille { display: grid; grid-template-columns: 400px minmax(0, 1fr); gap: 80px; align-items: start; } .titre { font-size: 44px; } .q { font-size: 26px; } }
+</style>

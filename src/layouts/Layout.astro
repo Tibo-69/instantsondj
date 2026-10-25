@@ -1,0 +1,60 @@
+---
+// src/layouts/Layout.astro — le squelette commun à toutes les pages.
+// Chaque page l'utilise comme ceci :
+//   <Layout title="..." description="..."> contenu de la page </Layout>
+// Il s'occupe du <head> (SEO, polices, partage) + header + footer.
+
+// Polices hébergées sur le site (plus rapide et conforme RGPD)
+import '@fontsource/cormorant-garamond/400.css';
+import '@fontsource/cormorant-garamond/600.css';
+import '@fontsource/schibsted-grotesk/400.css';
+import '@fontsource/schibsted-grotesk/500.css';
+import '@fontsource/schibsted-grotesk/600.css';
+import '../styles/global.css';
+
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import BarreMobile from '../components/BarreMobile.astro';
+
+interface Props {
+  title: string;          // balise <title> (≈ 60 caractères max)
+  description: string;    // meta description (≈ 155 caractères max)
+  page?: string;          // page active dans le menu : 'mariage', 'tarifs'…
+  noindex?: boolean;      // true pour la page 404
+}
+const { title, description, page = '', noindex = false } = Astro.props;
+const url = new URL(Astro.url.pathname, Astro.site);
+---
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={url} />
+    {noindex && <meta name="robots" content="noindex" />}
+
+    <!-- Aperçu de partage (WhatsApp, Facebook…) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="fr_FR" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={url} />
+    <meta property="og:image" content={new URL('/og-image.jpg', Astro.site)} />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- Favicon (à exporter depuis la maquette) -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <meta name="theme-color" content="#141110" />
+  </head>
+  <body>
+    <Header page={page} />
+    <main>
+      <slot />
+    </main>
+    <Footer />
+    <BarreMobile />
+  </body>
+</html>
