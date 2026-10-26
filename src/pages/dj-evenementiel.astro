@@ -1,0 +1,156 @@
+---
+// src/pages/dj-evenementiel.astro — page DJ Événements (adresse : /dj-evenementiel)
+// Haut de page, « Professionnel ou privé » (2 onglets), avis, FAQ, bloc devis.
+import Layout from '../layouts/Layout.astro';
+import Hero from '../components/Hero.astro';
+import Avis from '../components/Avis.astro';
+import Faq from '../components/Faq.astro';
+import CtaDevis from '../components/CtaDevis.astro';
+import { faqEvenements } from '../data/faq';
+
+const offres = [
+  {
+    id: 'entreprise', onglet: 'ENTREPRISE', label: 'ENTREPRISES', titre: 'Événements d’entreprise',
+    img: '/images/evenements-entreprise.webp', alt: 'Tiako aux platines pendant une soirée d’entreprise',
+    texte: 'Renforcer la cohésion d’équipe avec une ambiance musicale, du cocktail jusqu’à la fin de soirée.',
+    points: ['Soirée d’entreprise, cocktail, afterwork', 'Prises de parole : 2 micros sans fil inclus', 'Un seul interlocuteur, de la préparation au jour\u00a0J'],
+    lien: { texte: 'Demander un devis entreprise', href: '/devis' },
+  },
+  {
+    id: 'privee', onglet: 'SOIRÉE PRIVÉE', label: 'PARTICULIERS', titre: 'Soirées privées',
+    img: '/images/moment-dancefloor.webp', alt: 'Invités qui dansent lors d’une soirée privée',
+    texte: 'Une réception, une fête entre proches : une ambiance construite autour de vos invités et de vos envies musicales.',
+    points: ['Programmation selon vos envies', 'Installation adaptée au lieu de réception', 'Formule selon le nombre d’invités, jusqu’à 150 personnes'],
+    lien: { texte: 'Un anniversaire ? Voir la page dédiée', href: '/dj-anniversaire' },
+  },
+];
+---
+<Layout
+  title="DJ événementiel Lyon | Soirées d’entreprise et privées — DJ Tiako"
+  description="DJ pour soirées d’entreprise, cocktails et fêtes privées à Lyon, Besançon et alentours. Un seul interlocuteur, de la préparation au jour J."
+  page="evenements"
+>
+  <Hero
+    h1="DJ Événements à Lyon et région"
+    image="/images/evenements-hero.webp"
+    intro="Soirée privée, événement d’entreprise ou simple plaisir de se retrouver : je m’occupe de l’ambiance, vous profitez de l’instant."
+    introCourt="Une ambiance sur mesure, privée ou pro."
+  >
+    À chaque événement,<br class="br-large" /> <span class="or">son ambiance</span>
+  </Hero>
+
+  <!-- ===== Professionnel ou privé ===== -->
+  <section class="section">
+    <div class="container offres" data-onglets>
+      <div class="tete">
+        <span class="eyebrow">Professionnel ou privé</span>
+        <h2 class="titre">La même exigence,<br class="br-large" /> <span class="or-txt">une ambiance sur mesure</span></h2>
+      </div>
+
+      <div class="onglets" role="tablist" aria-label="Type d’événement">
+        {offres.map((o, i) => (
+          <button type="button" role="tab" id={`tab-${o.id}`} aria-controls={`panel-${o.id}`} aria-selected={i === 0 ? 'true' : 'false'} tabindex={i === 0 ? 0 : -1}>{o.onglet}</button>
+        ))}
+      </div>
+
+      {offres.map((o, i) => (
+        <div class="panneau" role="tabpanel" id={`panel-${o.id}`} aria-labelledby={`tab-${o.id}`} hidden={i !== 0}>
+          <img src={o.img} alt={o.alt} loading={i === 0 ? 'eager' : 'lazy'} />
+          <div class="p-txt">
+            <span class="label">{o.label}</span>
+            <h3>{o.titre}</h3>
+            <p>{o.texte}</p>
+            <ul>
+              {o.points.map((pt) => (
+                <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C9944F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 12 5 5L20 6"/></svg>{pt}</li>
+              ))}
+            </ul>
+            <a class="lien" href={o.lien.href}>{o.lien.texte} <span aria-hidden="true">→</span></a>
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <Avis liste="general" />
+  <Faq questions={faqEvenements} />
+  <CtaDevis />
+</Layout>
+
+<script>
+  // Onglets Entreprise / Soirée privée
+  document.querySelectorAll<HTMLElement>('[data-onglets]').forEach((bloc) => {
+    const onglets = [...bloc.querySelectorAll<HTMLButtonElement>('[role="tab"]')];
+    const panneaux = [...bloc.querySelectorAll<HTMLElement>('[role="tabpanel"]')];
+    const choisir = (i: number, focus = false) => {
+      onglets.forEach((o, k) => { o.setAttribute('aria-selected', String(k === i)); o.tabIndex = k === i ? 0 : -1; });
+      panneaux.forEach((p, k) => { p.hidden = k !== i; });
+      if (focus) onglets[i].focus();
+    };
+    onglets.forEach((o, i) => {
+      o.addEventListener('click', () => choisir(i));
+      o.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') choisir(i === 0 ? 1 : 0, true);
+      });
+    });
+  });
+</script>
+
+<style>
+  .br-large { display: none; }
+  @media (min-width: 768px) { .br-large { display: inline; } }
+
+  .offres { display: flex; flex-direction: column; align-items: stretch; gap: 28px; }
+  .tete { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; }
+  .tete .eyebrow::before { width: 28px; }
+  .titre { font-size: 30px; line-height: 1.15; }
+  .or-txt { color: var(--gold-text); }
+
+  .onglets { padding: 4px; border: 1px solid var(--ink); display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px; }
+  .onglets button { height: 46px; padding: 0 12px; border: 0; cursor: pointer; font-family: inherit; font-size: 13px; letter-spacing: 1px; background: transparent; color: var(--ink); }
+  .onglets button[aria-selected='true'] { background: var(--ink); color: #fff; }
+  .onglets button[aria-selected='false']:hover { background: var(--cream); }
+
+  .panneau { display: flex; flex-direction: column; gap: 24px; }
+  .panneau[hidden] { display: none; }
+  .panneau img { width: 100%; height: 230px; object-fit: cover; }
+  .p-txt { display: flex; flex-direction: column; gap: 14px; }
+  .label { font-size: 13px; font-weight: 600; letter-spacing: .5px; color: var(--gold-text); }
+  h3 { font-size: 30px; }
+  .p-txt p { font-size: 16px; line-height: 1.6; color: var(--text); }
+  ul { margin: 6px 0 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 12px; font-size: 15px; }
+  li { display: flex; align-items: flex-start; gap: 12px; line-height: 1.4; }
+  li svg { flex-shrink: 0; margin-top: 2px; }
+  .lien { align-self: flex-start; margin-top: 12px; min-height: 44px; border-bottom: 1px solid var(--ink); display: flex; align-items: center; gap: 12px; text-decoration: none; color: var(--ink); font-size: 16px; }
+  .lien:hover { color: var(--gold-text); border-color: var(--gold-text); }
+
+  @media (min-width: 768px) {
+    .offres { align-items: flex-start; gap: 32px; }
+    .tete { gap: 14px; }
+    .tete .eyebrow::before { width: 56px; }
+    .titre { font-size: 38px; }
+    .onglets { display: flex; }
+    .onglets button { padding: 0 28px; }
+    .panneau { width: 100%; gap: 32px; }
+    .panneau img { height: 400px; }
+    .p-txt { gap: 16px; }
+    h3 { font-size: 34px; }
+    .p-txt p { font-size: 17px; }
+    ul { margin-top: 8px; gap: 14px; font-size: 16px; }
+    li { align-items: center; gap: 16px; }
+    li svg { margin-top: 0; }
+    .lien { margin-top: 16px; min-height: 0; padding-bottom: 8px; font-size: 17px; }
+  }
+  @media (min-width: 1200px) {
+    .tete { gap: 12px; }
+    .tete .eyebrow::before { width: 66px; }
+    .titre { font-size: 44px; }
+    .onglets button { padding: 0 30px; }
+    .panneau { display: grid; grid-template-columns: 655px minmax(0, 1fr); gap: 80px; align-items: center; }
+    .panneau img { height: 407px; }
+    .p-txt { gap: 18px; }
+    h3 { font-size: 36px; }
+    .p-txt p { font-size: 18px; }
+    .lien { margin-top: 24px; font-size: 18px; }
+  }
+</style>

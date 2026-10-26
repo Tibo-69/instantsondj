@@ -3,17 +3,16 @@
 // Elle assemble : haut de page + bandeau, prestations, à propos,
 // avis, FAQ générale et bloc devis. Header et footer viennent du Layout.
 import Layout from '../layouts/Layout.astro';
-import Bandeau from '../components/Bandeau.astro';
+import Hero from '../components/Hero.astro';
 import Avis from '../components/Avis.astro';
 import Faq from '../components/Faq.astro';
 import CtaDevis from '../components/CtaDevis.astro';
 import { faqGenerale } from '../data/faq';
-import { site } from '../data/site';
 
 const prestations = [
-  { titre: 'Mariage', texte: 'Une ambiance romantique et festive pour le plus beau jour de votre vie.', img: '/images/carte-mariage.jpg', alt: 'Salle de réception dressée pour un mariage', href: '/dj-mariage' },
-  { titre: 'Anniversaire', texte: 'Faites de votre anniversaire un moment magique et inoubliable.', img: '/images/carte-anniversaire.jpg', alt: 'Piste de danse pendant un anniversaire', href: '/dj-anniversaire' },
-  { titre: 'Événements et soirées', texte: 'Séminaire, soirée d’entreprise ou fête privée : une ambiance musicale sur mesure.', img: '/images/carte-evenements.jpg', alt: 'Tiako aux platines lors d’une soirée d’entreprise', href: '/dj-evenementiel' },
+  { titre: 'Mariage', texte: 'Une ambiance romantique et festive pour le plus beau jour de votre vie.', img: '/images/carte-mariage.webp', alt: 'Salle de réception dressée pour un mariage', href: '/dj-mariage' },
+  { titre: 'Anniversaire', texte: 'Faites de votre anniversaire un moment magique et inoubliable.', img: '/images/carte-anniversaire.webp', alt: 'Piste de danse pendant un anniversaire', href: '/dj-anniversaire' },
+  { titre: 'Événements et soirées', texte: 'Séminaire, soirée d’entreprise ou fête privée : une ambiance musicale sur mesure.', img: '/images/carte-evenements.webp', alt: 'Tiako aux platines lors d’une soirée d’entreprise', href: '/dj-evenementiel' },
 ];
 ---
 <Layout
@@ -21,25 +20,18 @@ const prestations = [
   description="DJ mariage et événementiel à Lyon, Besançon et alentours. Sets sur mesure, sonorisation et éclairage pour vos mariages, anniversaires et soirées. Devis rapide."
   page="accueil"
 >
-  <!-- ===== Haut de page ===== -->
-  <section class="hero">
-    <div class="container hero-txt">
-      <div class="h1-ligne">
-        <span class="trait" aria-hidden="true"></span>
-        <h1>DJ Mariage &amp; Événementiel</h1>
-      </div>
-      <p class="accroche">Parce que chaque <span class="or">moment mérite</span> la bonne musique</p>
-      <p class="intro">
-        <span class="long">Des sets sur mesure, une ambiance unique et des souvenirs inoubliables pour vos mariages, anniversaires et tous vos événements privés ou professionnels.</span>
-        <span class="court">Des sets sur mesure, une ambiance unique.</span>
-      </p>
-      <div class="boutons" data-hero-cta>
-        <a class="btn btn-dark" href="/devis">DISCUTER DE VOTRE PROJET</a>
-        <a class="btn btn-light" href={site.telLien}>{site.telAffiche}</a>
-      </div>
-    </div>
-    <Bandeau />
-  </section>
+  <!-- ===== Haut de page (composant Hero) ===== -->
+  <Hero
+    variante="accueil"
+    h1="DJ Mariage & Événementiel"
+    image="/images/hero-accueil.webp"
+    position="center top"
+    positionMobile="55% top"
+    intro="Des sets sur mesure, une ambiance unique et des souvenirs inoubliables pour vos mariages, anniversaires et tous vos événements privés ou professionnels."
+    introCourt="Des sets sur mesure, une ambiance unique."
+  >
+    Chaque moment mérite<br class="hero-br" /> <span class="or">la bonne musique</span>
+  </Hero>
 
   <!-- ===== Mes prestations ===== -->
   <section class="section bg-cream">
@@ -47,7 +39,7 @@ const prestations = [
       <div class="tete">
         <span class="eyebrow center">Mes prestations</span>
         <h2 class="h2">Des ambiances uniques pour tous vos événements</h2>
-        <p>Que ce soit un mariage, un anniversaire ou un événement d’entreprise, je vous propose une prestation sur mesure adaptée à vos envies et à votre public.</p>
+        <p>Que ce soit un mariage, un anniversaire ou un événement d’entreprise,<br class="br-large" /> je vous propose une prestation sur mesure adaptée à vos envies et à votre public.</p>
       </div>
       <div class="cartes">
         {prestations.map((p) => (
@@ -56,7 +48,7 @@ const prestations = [
             <div class="corps">
               <h3>{p.titre}</h3>
               <p>{p.texte}</p>
-              <a class="link-arrow" href={p.href}>EN SAVOIR PLUS <span aria-hidden="true">⟶</span></a>
+              <a class="link-arrow" href={p.href}><span class="u">EN SAVOIR PLUS</span><span aria-hidden="true">⟶</span></a>
             </div>
           </article>
         ))}
@@ -69,7 +61,7 @@ const prestations = [
     <div class="container apropos">
       <div class="arche">
         <span class="fond" aria-hidden="true"></span>
-        <img src="/images/portrait-tiako.png" alt="Portrait de DJ Tiako tenant son casque" loading="lazy" />
+        <img src="/images/portrait-tiako.webp" alt="Portrait de DJ Tiako tenant son casque" loading="lazy" />
       </div>
       <div class="ap-txt">
         <span class="eyebrow">À propos</span>
@@ -87,27 +79,14 @@ const prestations = [
 </Layout>
 
 <style>
-  /* --- Haut de page --- */
-  .hero {
-    color: #fff;
-    background:
-      linear-gradient(180deg, rgba(10,8,6,.55) 0%, rgba(10,8,6,.75) 60%, rgba(10,8,6,.9) 100%),
-      url('/images/hero-accueil.jpg') 50% top / cover no-repeat, #120d09;
-  }
-  .hero-txt { padding-top: 24px; padding-bottom: 22px; }
-  .h1-ligne { display: flex; align-items: center; gap: 12px; }
-  .trait { width: 32px; height: 1px; background: var(--gold); flex-shrink: 0; }
-  h1 { font-size: 20px; color: var(--gold); line-height: 1.2; }
-  .accroche { margin-top: 16px; font-family: var(--serif); font-size: 32px; line-height: 1.05; }
-  .or { color: var(--gold); }
-  .intro { margin-top: 16px; font-size: 16px; color: rgba(255,255,255,.92); }
-  .long { display: none; }
-  .boutons { margin-top: 18px; display: flex; flex-direction: column; gap: 10px; }
-
+  /* Sur mobile, la grande phrase s'enchaîne sans retour forcé */
+  .hero-br { display: none; }
+  @media (min-width: 768px) { .hero-br { display: inline; } }
   /* --- Prestations --- */
   .presta { display: flex; flex-direction: column; gap: 32px; }
   .tete { text-align: center; display: flex; flex-direction: column; align-items: center; gap: 12px; }
   .tete p { max-width: 760px; font-size: 16px; color: var(--text); }
+  .br-large { display: none; }
   .cartes { display: grid; gap: 20px; }
   .carte { background: #fff; border: 1px solid var(--line); border-radius: 16px; overflow: hidden; transition: box-shadow .2s; }
   .carte:hover { box-shadow: 0 18px 40px rgba(17,17,17,.08); }
@@ -127,13 +106,6 @@ const prestations = [
 
   /* --- Tablette --- */
   @media (min-width: 768px) {
-    .hero-txt { max-width: 680px; margin-left: 0; padding-top: 72px; padding-bottom: 40px; }
-    h1 { font-size: 22px; }
-    .trait { width: 48px; }
-    .accroche { margin-top: 24px; font-size: 48px; }
-    .intro { margin-top: 24px; font-size: 17px; }
-    .long { display: inline; } .court { display: none; }
-    .boutons { margin-top: 32px; flex-direction: row; flex-wrap: wrap; gap: 16px; }
     .cartes { grid-template-columns: 1fr; }
     .carte { display: grid; grid-template-columns: 280px minmax(0, 1fr); }
     .carte img { height: 100%; min-height: 200px; }
@@ -147,19 +119,9 @@ const prestations = [
 
   /* --- Ordinateur --- */
   @media (min-width: 1200px) {
-    .hero {
-      background:
-        linear-gradient(90deg, rgba(18,13,9,.85) 0%, rgba(18,13,9,.55) 40%, rgba(18,13,9,.15) 70%, rgba(18,13,9,.3) 100%),
-        url('/images/hero-accueil.jpg') center top / cover no-repeat, #120d09;
-    }
-    .hero-txt { max-width: 900px; padding-top: 88px; padding-bottom: 56px; }
-    h1 { font-size: 30px; }
-    .trait { width: 66px; }
-    .accroche { font-size: 58px; max-width: 560px; }
-    .intro { margin-top: 28px; font-size: 18px; max-width: 760px; }
-    .boutons { margin-top: 28px; gap: 20px; }
     .presta { gap: 40px; }
-    .tete p { font-size: 18px; }
+    .tete p { font-size: 18px; max-width: none; }
+    .br-large { display: inline; }
     .cartes { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px; }
     .carte { display: block; }
     .carte img { height: 205px; min-height: 0; }

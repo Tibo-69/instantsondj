@@ -1,0 +1,40 @@
+---
+// src/pages/dj-mariage.astro — page DJ Mariage (adresse : /dj-mariage)
+// Haut de page, moments clés, préparation, avis, FAQ mariage, bloc devis.
+import Layout from '../layouts/Layout.astro';
+import Hero from '../components/Hero.astro';
+import Moments from '../components/Moments.astro';
+import Preparation from '../components/Preparation.astro';
+import Avis from '../components/Avis.astro';
+import Faq from '../components/Faq.astro';
+import CtaDevis from '../components/CtaDevis.astro';
+import { faqMariagePour } from '../data/faq';
+---
+<Layout
+  title="DJ mariage | DJ Tiako — Lyon, Besançon et alentours"
+  description="DJ mariage dans la région lyonnaise et autour de Besançon : cérémonie, vin d’honneur, repas, ouverture du bal et dancefloor. Demandez votre devis."
+  page="mariage"
+>
+  <Hero
+    h1="DJ Mariage à Lyon et Besançon"
+    image="/images/mariage-hero.webp"
+    intro="Vos goûts musicaux, vos envies, votre vision de la fête : je vous accompagne en musique pour faire de chaque instant un souvenir inoubliable."
+    introCourt="Vos envies, votre musique, votre mariage."
+  >
+    Un mariage, vos choix<br class="br-large" /> <span class="or">votre ambiance</span>
+  </Hero>
+
+  <Moments />
+
+  <Preparation image="/images/mariage-installation.webp" alt="DJ Tiako installé face à la salle de réception" />
+
+  <Avis liste="general" />
+  <Faq questions={faqMariagePour('general')} />
+  <CtaDevis />
+</Layout>
+
+<style>
+  /* Sur mobile, la grande phrase tient sur une ligne continue */
+  .br-large { display: none; }
+  @media (min-width: 768px) { .br-large { display: inline; } }
+</style>

@@ -1,0 +1,116 @@
+---
+// src/pages/dj-anniversaire.astro — page DJ Anniversaire (adresse : /dj-anniversaire)
+// Haut de page, « Une soirée en trois temps », avis, FAQ anniversaire, bloc devis.
+import Layout from '../layouts/Layout.astro';
+import Hero from '../components/Hero.astro';
+import Avis from '../components/Avis.astro';
+import Faq from '../components/Faq.astro';
+import CtaDevis from '../components/CtaDevis.astro';
+import { faqAnniversaire } from '../data/faq';
+---
+<Layout
+  title="DJ anniversaire Lyon | DJ Tiako"
+  description="DJ pour votre anniversaire à Lyon, Besançon et alentours : une soirée à votre image, du premier verre à la dernière danse. Devis rapide."
+  page="anniversaire"
+>
+  <Hero
+    h1="DJ Anniversaire à Lyon et région"
+    image="/images/anniversaire-hero.webp"
+    intro="En famille ou entre amis, je m’adapte à vos goûts musicaux et à vos envies pour créer une ambiance qui vous ressemble et faire danser vos invités."
+    introCourt="Une soirée qui vous ressemble."
+  >
+    Votre anniversaire,<br class="br-large" /> <span class="or">votre soirée</span>
+  </Hero>
+
+  <!-- ===== Une soirée en trois temps ===== -->
+  <section class="section">
+    <div class="container trois">
+      <div class="tete">
+        <span class="eyebrow">Une soirée en trois temps</span>
+        <h2 class="titre">Du premier verre à la dernière danse</h2>
+        <p>Chaque soirée est préparée avec vous&nbsp;: vos envies musicales, vos invités<br class="br-desk" /> et le moment que vous voulez rendre inoubliable.</p>
+      </div>
+      <div class="temps">
+        <div class="etape t1">
+          <span class="num">01 · L’ACCUEIL</span>
+          <h3>Les retrouvailles</h3>
+          <p>Une ambiance musicale conviviale pour l’apéritif, avec un volume qui laisse place aux conversations.</p>
+        </div>
+        <div class="etape t2">
+          <span class="num">02 · LA PISTE</span>
+          <h3>Place à la danse</h3>
+          <p>Une programmation construite avec vous, ajustée en direct pour garder la piste pleine jusqu’à la fin.</p>
+        </div>
+        <article class="gateau">
+          <img src="/images/anniversaire-gateau.webp" alt="Deux jets d’étincelles froides encadrant la piste" loading="lazy" />
+          <div class="g-txt">
+            <span class="num">03 · LE TEMPS FORT</span>
+            <h3>Le moment du gâteau</h3>
+            <p>Les lumières se baissent, votre morceau démarre&nbsp;: le moment le plus attendu de la soirée.</p>
+            <div class="option"><span>Options 2 jets · Effet visuel</span><b>50 €</b></div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <Avis liste="general" />
+  <Faq questions={faqAnniversaire} />
+  <CtaDevis />
+</Layout>
+
+<style>
+  .br-large, .br-desk { display: none; }
+  @media (min-width: 768px) { .br-large { display: inline; } }
+
+  .trois { display: flex; flex-direction: column; gap: 32px; }
+  .tete { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; }
+  .tete .eyebrow::before { width: 28px; }
+  .titre { font-size: 30px; line-height: 1.15; }
+  .tete p, .etape p, .g-txt p { font-size: 16px; line-height: 1.6; }
+
+  .temps { display: flex; flex-direction: column; gap: 32px; }
+  .etape { padding-top: 20px; border-top: 1px solid var(--gold); display: flex; flex-direction: column; gap: 12px; }
+  .num { font-size: 13px; color: var(--gold-text); }
+  h3 { font-size: 26px; }
+  .gateau { background: #1b1511; color: #fff; border-radius: 16px; overflow: hidden; }
+  .gateau img { width: 100%; height: 240px; object-fit: cover; }
+  .g-txt { padding: 24px 22px 26px; display: flex; flex-direction: column; gap: 14px; }
+  .g-txt .num { color: var(--gold); }
+  .option { margin-top: 4px; padding-top: 16px; border-top: 1px solid var(--gold-text); display: flex; justify-content: space-between; align-items: baseline; font-size: 14px; }
+  .option b { font-size: 16px; font-weight: 600; color: var(--gold); }
+
+  /* Tablette : 01 et 02 côte à côte, la carte du gâteau en dessous */
+  @media (min-width: 768px) {
+    .trois { gap: 40px; }
+    .tete { gap: 14px; }
+    .tete .eyebrow::before { width: 56px; }
+    .titre { font-size: 38px; }
+    .tete p { font-size: 17px; }
+    .temps { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px; }
+    .etape { gap: 14px; }
+    h3 { font-size: 28px; }
+    .gateau { grid-column: 1 / -1; display: grid; grid-template-columns: 320px minmax(0, 1fr); }
+    .gateau img { height: 100%; min-height: 320px; }
+    .g-txt { padding: 32px 30px; justify-content: center; gap: 16px; }
+    .option { margin-top: 6px; padding-top: 18px; }
+  }
+
+  /* Ordinateur : la carte du gâteau au centre, 01 à gauche, 02 à droite */
+  @media (min-width: 1200px) {
+    .trois { gap: 32px; }
+    .tete { gap: 12px; }
+    .tete .eyebrow::before { width: 66px; }
+    .titre { font-size: 44px; }
+    .tete p, .etape p, .g-txt p { font-size: 18px; }
+    .br-desk { display: inline; }
+    .temps { grid-template-columns: minmax(0, 1fr) 450px minmax(0, 1fr); gap: 28px; align-items: start; }
+    .etape { margin-top: 196px; padding-top: 22px; gap: 16px; }
+    .t1 { grid-column: 1; grid-row: 1; }
+    .gateau { grid-column: 2; grid-row: 1; display: block; }
+    .t2 { grid-column: 3; grid-row: 1; }
+    .gateau img { height: 326px; min-height: 0; }
+    .g-txt { padding: 28px 30px 30px; }
+    .option { padding-top: 22px; }
+  }
+</style>

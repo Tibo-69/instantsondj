@@ -1,0 +1,88 @@
+---
+// src/pages/dj-mariage-lyon.astro — page DJ mariage Lyon (adresse : /dj-mariage-lyon)
+// C'est la page qui vise « DJ mariage Lyon » sur Google : textes locaux,
+// communes, déroulé adapté, retour d'expérience et FAQ Lyon.
+import Layout from '../layouts/Layout.astro';
+import Hero from '../components/Hero.astro';
+import ZoneVille from '../components/ZoneVille.astro';
+import Deroule from '../components/Deroule.astro';
+import Preparation from '../components/Preparation.astro';
+import RetourExperience from '../components/RetourExperience.astro';
+import Avis from '../components/Avis.astro';
+import Faq from '../components/Faq.astro';
+import CtaDevis from '../components/CtaDevis.astro';
+import { faqMariagePour } from '../data/faq';
+---
+<Layout
+  title="DJ mariage Lyon | DJ Tiako, DJ basé à Villeurbanne"
+  description="DJ mariage à Lyon et dans toute la région lyonnaise : cérémonie, vin d’honneur, repas et soirée dansante. Basé à Villeurbanne, déplacement inclus jusqu’à 70 km."
+  page="mariage"
+>
+  <Hero
+    h1="DJ Mariage à Lyon"
+    image="/images/mariage-hero.webp"
+    intro="Basé à Villeurbanne, j’accompagne votre mariage à Lyon et dans toute la région lyonnaise, de la préparation jusqu’à la dernière danse sur la piste."
+    introCourt="De la préparation jusqu’à la dernière danse."
+  >
+    Votre DJ de mariage<br class="br-large" /> <span class="or">au cœur de Lyon</span>
+  </Hero>
+
+  <ZoneVille
+    eyebrow="DJ mariage à Lyon"
+    titre="Votre DJ dans toute la région lyonnaise"
+    paragraphes={[
+      'Basé à Villeurbanne, j’anime vos mariages à Lyon, dans toute la métropole et dans les départements voisins. Chaque soirée est préparée avec vous et la sonorisation est adaptée à votre lieu de réception.',
+      'Déplacement inclus jusqu’à 70 km aller-retour depuis Villeurbanne.',
+    ]}
+    communes={['Villeurbanne', 'Caluire-et-Cuire', 'Écully', 'Bron', 'Ain', 'Isère', 'Loire']}
+  />
+
+  <Deroule
+    titre="Votre mariage à Lyon,"
+    titreOr="temps fort par temps fort"
+    intro="De la cérémonie au dernier morceau, chaque moment a sa musique et son installation. Voici comment se déroule une journée de mariage dans la région lyonnaise."
+    textes={[
+      'Pour une cérémonie laïque en plein air, dans un parc ou un domaine autour de Lyon, deux enceintes et deux micros sans fil : chaque mot est entendu, même dehors.',
+      'Une enceinte sur batterie installée là où se tient le cocktail, en terrasse ou au jardin : une ambiance douce qui laisse place aux conversations.',
+      'Lumières baissées, morceau choisi ensemble : votre entrée lance la soirée, dans une salle mise en lumière par six projecteurs LED.',
+      'Un fond sonore entre les plats, des micros sans fil pour les discours de vos proches et un rythme calé avec votre traiteur.',
+      'Votre morceau ou un mashup préparé pour vous, avec effets lumineux et, si vous le souhaitez, deux jets d’étincelles froides.',
+      'Un mix qui évolue en direct selon la piste, jusqu’à 4 h 30 si votre lieu le permet, avec machine à brouillard et régie lumière.',
+    ]}
+  />
+
+  <Preparation
+    variante="ville"
+    image="/images/mariage-installation.webp"
+    alt="DJ Tiako installé face à la salle de réception"
+    titre="Une soirée préparée pour votre lieu"
+    paragraphes={[
+      'Avant le jour J, on se rencontre autant que nécessaire pour construire le déroulé de votre mariage, vos envies musicales et les moments à ne pas manquer.',
+      'Chaque salle de la région lyonnaise a ses contraintes : horaires, configuration, limiteur de son éventuel. Je les anticipe pour adapter la sonorisation et l’installation, en lien avec votre lieu, votre traiteur et votre photographe.',
+    ]}
+    points={['Déroulement personnalisé', 'Installation adaptée au lieu', 'Coordination avec les intervenants']}
+  />
+
+  <RetourExperience
+    image="/images/mariage-colombiere.webp"
+    alt="Les mariés au coucher du soleil au Gîte de la Colombière, Saint-Symphorien-de-Lay — photo Anthéa Photography"
+    lieu="Gîte de la Colombière, Saint-Symphorien-de-Lay"
+    situation="LOIRE (42) · À 1 H DE LYON"
+    paragraphes={[
+      'Être DJ mariage au Gîte de la Colombière, c’est bien plus que passer des morceaux : c’est accompagner les mariés et leurs invités tout au long d’une journée qui leur ressemble, du fond sonore du vin d’honneur jusqu’aux dernières heures sur la piste.',
+      'Deux cultures et plusieurs générations se sont retrouvées autour de la musique : la cuisine, la cérémonie du henné, les chants traditionnels, puis un dancefloor rempli jusqu’au bout de la nuit.',
+    ]}
+    citation="Ne pas savoir exactement où la soirée va nous emmener, tout en l’ayant assez préparée pour rebondir à chaque instant."
+    points={['Cérémonie du henné', 'Deux cultures réunies', 'Dancefloor jusqu’au bout']}
+    photographe={{ nom: 'Anthéa Photography', lien: 'https://www.antheaphotography.com/' }}
+  />
+
+  <Avis liste="lyon" fond="white" />
+  <Faq questions={faqMariagePour('lyon')} />
+  <CtaDevis />
+</Layout>
+
+<style>
+  .br-large { display: none; }
+  @media (min-width: 768px) { .br-large { display: inline; } }
+</style>

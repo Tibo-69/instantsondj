@@ -9,7 +9,7 @@ const { liste = 'general', fond = 'cream' } = Astro.props;
 const avis = listesAvis[liste];
 const LONG = 170; // au-delà de ce nombre de caractères, on coupe avec « Lire la suite »
 ---
-<section class={`section ${fond === 'cream' ? 'bg-cream' : ''}`} aria-labelledby="avis-titre">
+<section class={`section avis-bloc ${fond === 'cream' ? 'bg-cream' : ''}`} aria-labelledby="avis-titre">
   <div class="container wrap">
     <div class="tete">
       <span class="eyebrow center">Ils m’ont fait confiance</span>
@@ -34,20 +34,57 @@ const LONG = 170; // au-delà de ce nombre de caractères, on coupe avec « Lire
       ))}
     </ul>
 
+    <!-- Mobile : flèches + points pour passer d'un avis à l'autre -->
+    <div class="nav" aria-hidden="true">
+      <button class="fl prec" type="button" tabindex="-1" disabled><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="m15 6-6 6 6 6"/></svg></button>
+      <span class="points">{avis.map((_, i) => <i class={i === 0 ? 'actif' : ''}></i>)}</span>
+      <button class="fl suiv" type="button" tabindex="-1"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg></button>
+    </div>
+
     <div class="google">
-      <span class="note"><b class="g">G</b> 5,0 <span class="etoiles" aria-label="5 étoiles sur 5">★★★★★</span></span>
-      <a class="btn btn-outline" href="#" target="_blank" rel="noopener">VOIR TOUS LES AVIS GOOGLE ⟶</a>
+      <span class="note"><i class="l" aria-hidden="true"></i><b class="g">G</b> 5,0 <span class="etoiles" aria-label="5 étoiles sur 5">★★★★★</span><i class="l" aria-hidden="true"></i></span>
+      <a class="btn btn-outline" href="#" target="_blank" rel="noopener"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M14 3h7v7M21 3l-9 9M19 14v6a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h6"/></svg>VOIR TOUS LES AVIS GOOGLE ⟶</a>
       <!-- TODO : remplacer # par le lien de la fiche Google de Tibo -->
     </div>
   </div>
 </section>
 
+<script>
+  // Mobile : flèches et points synchronisés avec le défilement des avis.
+  document.querySelectorAll<HTMLElement>('.avis-bloc').forEach((bloc) => {
+    const liste = bloc.querySelector<HTMLElement>('.cartes')!;
+    const cartes = [...liste.children] as HTMLElement[];
+    const points = [...bloc.querySelectorAll<HTMLElement>('.points i')];
+    const prec = bloc.querySelector<HTMLButtonElement>('.prec')!;
+    const suiv = bloc.querySelector<HTMLButtonElement>('.suiv')!;
+    let actuel = 0;
+    const aller = (i: number) => {
+      const c = cartes[Math.max(0, Math.min(cartes.length - 1, i))];
+      liste.scrollTo({ left: c.offsetLeft, behavior: 'smooth' });
+    };
+    const maj = () => {
+      const centre = liste.scrollLeft + liste.clientWidth / 2;
+      let best = 0, d = Infinity;
+      cartes.forEach((c, k) => { const dc = Math.abs(c.offsetLeft + c.offsetWidth / 2 - centre); if (dc < d) { d = dc; best = k; } });
+      actuel = best;
+      points.forEach((p, k) => p.classList.toggle('actif', k === best));
+      prec.disabled = best === 0;
+      suiv.disabled = best === cartes.length - 1;
+    };
+    prec.addEventListener('click', () => aller(actuel - 1));
+    suiv.addEventListener('click', () => aller(actuel + 1));
+    liste.addEventListener('scroll', () => requestAnimationFrame(maj), { passive: true });
+    maj();
+  });
+</script>
+
 <style>
   .wrap { display: flex; flex-direction: column; gap: 32px; }
   .tete { text-align: center; display: flex; flex-direction: column; align-items: center; gap: 12px; }
-  .cartes { margin: 0 calc(var(--gutter) * -1); padding: 0 var(--gutter) 4px; list-style: none; display: flex; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; }
+  /* Mobile : un seul avis visible à la fois, on passe au suivant avec les flèches ou au doigt */
+  .cartes { position: relative; margin: 0; padding: 0 0 4px; list-style: none; display: flex; gap: 24px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; }
   .cartes::-webkit-scrollbar { display: none; }
-  .carte { flex: 0 0 88%; scroll-snap-align: center; background: #fff; border: 1px solid var(--card-line); border-radius: 8px; padding: 20px; display: flex; flex-direction: column; gap: 14px; font-size: 14px; line-height: 1.55; }
+  .carte { flex: 0 0 100%; scroll-snap-align: start; scroll-snap-stop: always; background: #fff; border: 1px solid var(--card-line); border-radius: 8px; padding: 20px; display: flex; flex-direction: column; gap: 14px; font-size: 14px; line-height: 1.55; }
   .qui { display: flex; align-items: center; gap: 12px; }
   .qui > span:nth-child(2) { display: flex; flex-direction: column; gap: 2px; }
   .qui b { font-weight: 400; font-size: 16px; }
@@ -59,12 +96,31 @@ const LONG = 170; // au-delà de ce nombre de caractères, on coupe avec « Lire
   .extrait { display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
   .plus { align-self: flex-end; color: #8a6330; font-size: 13px; }
   details[open] summary { display: none; }
+  .nav { display: flex; align-items: center; justify-content: space-between; margin-top: -8px; }
+  .fl { width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--ink); background: transparent; color: var(--ink); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: opacity .15s, border-color .15s; }
+  .fl:disabled { border-color: var(--line); color: #bdbdbd; cursor: default; }
+  .points { display: flex; align-items: center; gap: 10px; }
+  .points i { width: 6px; height: 4px; border-radius: 2px; background: #d6d1ca; transition: width .2s, background .2s; }
+  .points i.actif { width: 16px; background: var(--gold); }
   .google { display: flex; flex-direction: column; align-items: center; gap: 16px; }
   .note { display: flex; align-items: center; gap: 10px; font-size: 18px; }
   .g { color: #4285f4; }
+  .l { display: none; width: 66px; height: 1px; background: var(--gold); }
   @media (min-width: 768px) {
     .cartes { margin: 0; padding: 0; overflow: visible; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; align-items: stretch; }
     .carte { padding: 16px; }
+    .nav { display: none; }
   }
-  @media (min-width: 1200px) { .cartes { gap: 40px; } .carte { padding: 20px 36px 20px 20px; } }
+  @media (min-width: 1200px) {
+    .cartes { gap: 40px; }
+    .carte { padding: 20px 36px 16px 20px; gap: 18px; }
+    .qui { align-items: flex-start; gap: 10px; }
+    .guillemet { order: -1; margin-left: 0; font-size: 34px; }
+    .initiale { width: 44px; height: 44px; }
+    .qui b { font-size: 17px; }
+    .etoiles { letter-spacing: 3px; font-size: 15px; }
+    .carte > p, .carte > details { margin-left: 40px; }
+    .l { display: block; }
+    .note { gap: 12px; }
+  }
 </style>

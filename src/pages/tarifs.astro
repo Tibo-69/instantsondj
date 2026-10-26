@@ -1,0 +1,219 @@
+---
+// src/pages/tarifs.astro — page Tarifs (adresse : /tarifs)
+// Les 3 formules, les options, la FAQ tarifs et le bloc devis.
+// Pour changer un prix ou un équipement : modifie simplement les listes ci-dessous.
+import Layout from '../layouts/Layout.astro';
+import Faq from '../components/Faq.astro';
+import CtaDevis from '../components/CtaDevis.astro';
+import { faqTarifs } from '../data/faq';
+
+const packs = [
+  {
+    nom: '01- Pack Party', public: 'Adapté jusqu’à 60 personnes', prix: '1 100 €',
+    img: '/images/tarif-pack-party.webp', alt: 'Installation DJ du Pack Party',
+    groupes: [
+      { titre: 'Son', items: ['2 Enceintes RCF ART 915', '2 Micro sans fil', '1 Régie DJ Pioneer RX3'] },
+      { titre: 'Éclairage', items: ['1 Gigbar 2 Chauvet', '1 machine à brouillard', '1 Régie lumière Wolfmix'] },
+    ],
+    plus: ['L’essentiel', 'son et jeu de lumière'],
+  },
+  {
+    nom: '02- Pack Élégance', public: 'Adapté jusqu’à 150 personnes', prix: '1 300 €', populaire: true,
+    img: '/images/tarif-pack-elegance.webp', alt: 'Installation DJ du Pack Élégance',
+    groupes: [
+      { titre: 'Son', items: ['2 Enceintes RCF ART 915', '2 Micro sans fil', '1 Régie DJ Pioneer RX3', '1 Caisson FBT 115SA'] },
+      { titre: 'Éclairage', items: ['2 Lyres Varytec Hero spot wash 140w', '2 Barled 200 AFX', '2 Eurolite MFX 10', '1 machine à brouillard', '1 Régie lumière Wolfmix'] },
+    ],
+    plus: ['Le +', 'caisson de basses et jeu de lumières complet'],
+  },
+  {
+    nom: '03- Pack Prestige', public: 'Adapté jusqu’à 150 personnes', prix: '1 450 €',
+    img: '/images/tarif-pack-prestige.webp', alt: 'Installation DJ du Pack Prestige',
+    groupes: [
+      { titre: 'Son', items: ['2 Enceintes RCF ART 915', '2 Micro sans fil', '1 Régie DJ Pioneer RX3', '1 Caisson FBT 115SA'] },
+      { titre: 'Éclairage', items: ['2 Lyres Varytec Hero spot wash 140w', '2 Barled 200 AFX', '2 Eurolite MFX 10', '6 PAR LED décoratif', '1 machine à brouillard', '1 Régie lumière Wolfmix'] },
+      { titre: 'Effets scéniques', items: ['2 jets d’étincelles froides'] },
+    ],
+    plus: ['Le +', 'éclairage décoratif et jets d’étincelles inclus'],
+  },
+];
+
+const options = [
+  { titre: 'Jets d’étincelles', detail: '2 jets · Effet visuel', prix: '50 €', img: '/images/option-etincelles.webp', alt: 'Jets d’étincelles froides' },
+  { titre: 'Sonorisation vin d’honneur', detail: 'Enceinte sur batterie · Vin d’honneur', prix: '140 €', img: '/images/option-vin-honneur.webp', alt: 'Enceinte sur batterie pour un cocktail' },
+  { titre: 'Éclairage décoratif', detail: '6 PAR LED · Mise en lumière', prix: '150 €', img: '/images/option-eclairage.webp', alt: 'Projecteurs LED décoratifs' },
+  { titre: 'Cérémonie laïque', detail: '2 enceintes · 2 micros sans fil', prix: '180 €', img: '/images/option-ceremonie.webp', alt: 'Sonorisation d’une cérémonie laïque en extérieur' },
+];
+---
+<Layout
+  title="Tarifs et formules DJ | DJ Tiako"
+  description="Formules DJ de 1 100 € à 1 450 € : sonorisation, éclairage et prestation DJ, avec options jets d’étincelles, cérémonie laïque et plus."
+  page="tarifs"
+>
+  <!-- ===== Les formules ===== -->
+  <section class="formules">
+    <div class="container f-wrap">
+      <div class="tete">
+        <span class="sur-titre">Tarifs</span>
+        <h1 class="grand">Les formules DJ</h1>
+        <span class="trait" aria-hidden="true"></span>
+        <p>Trois configurations combinant sonorisation, éclairage et prestation DJ,<br class="br-desk" /> avec des options complémentaires disponibles selon vos besoins.</p>
+      </div>
+
+      <div class="packs">
+        {packs.map((p) => (
+          <article class={`pack ${p.populaire ? 'populaire' : ''}`}>
+            {p.populaire && <span class="badge">LE PLUS CHOISI</span>}
+            <img src={p.img} alt={p.alt} loading="lazy" />
+            <div class="p-tete">
+              <h2>{p.nom}</h2>
+              <span class="public">{p.public}</span>
+              <span class="prix">{p.prix}</span>
+            </div>
+            <div class="groupes">
+              {p.groupes.map((g) => (
+                <div class="groupe">
+                  <h3>{g.titre}</h3>
+                  <ul>{g.items.map((it) => <li>{it}</li>)}</ul>
+                </div>
+              ))}
+            </div>
+            <span class="plus"><strong>{p.plus[0]}</strong> · {p.plus[1]}</span>
+          </article>
+        ))}
+      </div>
+      <p class="note">Prix tout compris · TVA non applicable, art. 293 B du CGI</p>
+    </div>
+  </section>
+
+  <!-- ===== Options ===== -->
+  <section class="section bg-cream">
+    <div class="container f-wrap">
+      <div class="tete">
+        <span class="sur-titre">Options et extras</span>
+        <h2 class="grand">Complétez votre formule</h2>
+        <span class="trait" aria-hidden="true"></span>
+        <p>Ajoutez les équipements et effets adaptés aux différents temps forts de votre événement.</p>
+      </div>
+      <div class="options">
+        {options.map((o) => (
+          <article class="option">
+            <img src={o.img} alt={o.alt} loading="lazy" />
+            <div class="o-txt">
+              <h3>{o.titre}</h3>
+              <span class="detail">{o.detail}</span>
+              <span class="o-prix">{o.prix}</span>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <Faq questions={faqTarifs} />
+  <CtaDevis />
+</Layout>
+
+<style>
+  .br-desk { display: none; }
+
+  /* --- En-têtes centrés --- */
+  .formules { padding: 40px 0 56px; }
+  .f-wrap { display: flex; flex-direction: column; gap: 28px; }
+  .tete { text-align: center; display: flex; flex-direction: column; align-items: center; gap: 12px; }
+  .sur-titre { font-family: var(--serif); font-size: 20px; color: var(--gold-text); }
+  .grand { font-size: 36px; line-height: 1.1; }
+  .bg-cream .grand { font-size: 32px; }
+  .trait { width: 50px; height: 1px; background: var(--gold); margin: 4px 0; }
+  .tete p { font-size: 16px; line-height: 1.6; }
+
+  /* --- Cartes des formules (mobile) --- */
+  .packs { display: flex; flex-direction: column; gap: 28px; }
+  .pack { position: relative; border: 1px solid var(--card-line); border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; }
+  .badge { position: absolute; top: 0; left: 50%; transform: translateX(-50%); padding: 10px 22px; background: var(--gold); border-radius: 0 0 8px 8px; color: #fff; font-size: 14px; letter-spacing: .5px; white-space: nowrap; }
+  .pack img { width: 100%; height: 180px; object-fit: cover; }
+  .p-tete { padding: 24px 22px 0; display: flex; flex-direction: column; gap: 12px; }
+  .pack h2 { font-size: 32px; }
+  .public { font-size: 15px; color: #555; }
+  .prix { padding: 6px 0 12px; border-bottom: 1px solid var(--line); font-family: var(--serif); font-size: 32px; }
+  .groupes { padding: 16px 22px 0; display: flex; flex-direction: column; gap: 12px; }
+  .groupe { display: flex; flex-direction: column; gap: 12px; }
+  .groupe h3 { font-size: 22px; }
+  .groupe ul { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 10px; font-size: 15px; }
+  .groupe li { display: flex; align-items: center; gap: 10px; }
+  /* petite coche dorée devant chaque équipement */
+  .groupe li::before { content: ''; width: 9px; height: 4px; flex-shrink: 0; margin: -4px 2px 0 1px; border-left: 1.5px solid #c9944f; border-bottom: 1.5px solid #c9944f; transform: rotate(-45deg); }
+  .plus { margin: 20px 22px 28px; padding: 14px 16px; border-radius: 8px; background: var(--cream-2); font-size: 14px; line-height: 1.5; color: #7a5726; }
+  .plus strong { font-weight: 600; }
+  .note { text-align: center; font-size: 13px; color: var(--muted); }
+
+  /* --- Options (mobile : 2 par ligne) --- */
+  .options { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .option { background: #fff; border: 1px solid var(--card-line); border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; }
+  .option img { width: 100%; height: 130px; object-fit: cover; }
+  .o-txt { padding: 14px 14px 16px; display: flex; flex-direction: column; flex: 1; gap: 6px; }
+  .option h3 { font-size: 21px; line-height: 1.1; }
+  .detail { font-size: 12px; line-height: 1.4; }
+  .o-prix { margin-top: auto; padding-top: 6px; font-size: 16px; font-weight: 600; }
+
+  /* --- Tablette --- */
+  @media (min-width: 768px) {
+    .formules { padding: 48px 0 72px; }
+    .f-wrap { gap: 36px; }
+    .tete { gap: 14px; }
+    .sur-titre { font-size: 24px; }
+    .grand { font-size: 46px; }
+    .bg-cream .grand { font-size: 42px; }
+    .trait { width: 60px; }
+    .tete p { font-size: 17px; }
+    /* photo à gauche + nom/prix à droite, puis le matériel sur 2 colonnes */
+    .pack { display: grid; grid-template-columns: 260px minmax(0, 1fr); }
+    .badge { left: 130px; font-size: 14px; }
+    .pack img { height: 200px; }
+    .p-tete { padding: 26px 28px; justify-content: center; gap: 8px; }
+    .pack h2 { font-size: 34px; }
+    .public { font-size: 16px; }
+    .prix { padding: 0; border: 0; font-size: 34px; }
+    .groupes { grid-column: 1 / -1; margin: 0 28px; padding: 22px 0 28px; border-top: 1px solid var(--line); display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
+    .groupe { gap: 14px; }
+    .groupe h3 { font-size: 24px; }
+    .groupe ul { gap: 12px; }
+    .plus { grid-column: 1 / -1; margin: 0 28px 28px; }
+    .options { gap: 24px; }
+    .option { border-radius: 16px; }
+    .option img { height: 220px; }
+    .o-txt { padding: 24px 26px 28px; gap: 10px; }
+    .option h3 { font-size: 26px; line-height: 1.15; }
+    .detail { font-size: 14px; }
+  }
+
+  /* --- Ordinateur --- */
+  @media (min-width: 1200px) {
+    .formules { padding: 40px 0 96px; }
+    .f-wrap { gap: 40px; }
+    .tete { gap: 16px; }
+    .sur-titre { font-size: 28px; }
+    .grand, .bg-cream .grand { font-size: 56px; }
+    .trait { width: 66px; }
+    .tete p { font-size: 18px; }
+    .br-desk { display: inline; }
+    /* 3 cartes côte à côte, de même hauteur */
+    .packs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 34px; align-items: stretch; }
+    .pack { display: flex; }
+    .badge { left: 50%; padding: 12px 28px; font-size: 16px; }
+    .pack img { height: 226px; }
+    .p-tete { padding: 32px 32px 0; justify-content: flex-start; gap: 16px; }
+    .pack h2 { font-size: 40px; }
+    .public { font-size: 17px; }
+    .prix { padding: 12px 0 14px; border-bottom: 1px solid var(--line); font-size: 38px; }
+    .groupes { margin: 0; padding: 22px 32px 0; border: 0; display: flex; flex-direction: column; gap: 22px; }
+    .groupe { gap: 16px; }
+    .groupe h3 { font-size: 26px; }
+    .groupe ul { gap: 16px; }
+    .plus { margin: auto 32px 32px; position: relative; top: 0; }
+    .pack .groupes { flex-grow: 1; padding-bottom: 22px; }
+    .options { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 34px; }
+    .option img { height: 248px; }
+    .o-txt { padding: 28px 30px 32px; gap: 12px; }
+  }
+</style>

@@ -1,0 +1,111 @@
+---
+// src/components/Deroule.astro — « Le déroulé de la journée » (fond sombre, 6 étapes).
+// Ordinateur : frise en zigzag. Tablette : frise verticale à gauche.
+// Mobile : cartes qui défilent au doigt (scroll-snap, sans JavaScript).
+interface Props {
+  titre: string;     // 1re ligne du titre (blanc)
+  titreOr: string;   // 2e ligne (doré)
+  intro: string;
+  textes: string[];  // 6 textes, un par étape, dans l'ordre
+}
+const { titre, titreOr, intro, textes } = Astro.props;
+
+const etapes = [
+  { titre: 'Cérémonie', img: '/images/moment-ceremonie.webp', alt: 'Cérémonie en extérieur, enceintes et micros sur pied devant l’arche', option: 'OPTION CÉRÉMONIE LAÏQUE · 180 €' },
+  { titre: 'Vin d’honneur', img: '/images/moment-vin-honneur.webp', alt: 'Enceinte sur pied à côté du buffet du vin d’honneur', option: 'OPTION SONORISATION COCKTAIL · 140 €' },
+  { titre: 'Entrée en salle', img: '/images/moment-entree-salle.webp', alt: 'Salle de réception dressée et illuminée', option: 'INCLUS DANS TOUTES LES FORMULES' },
+  { titre: 'Repas', img: '/images/moment-repas.webp', pos: '50% 12%', alt: 'Table de mixage et micros face aux invités attablés', option: 'INCLUS DANS TOUTES LES FORMULES' },
+  { titre: 'Ouverture du bal', img: '/images/moment-ouverture-bal.webp', alt: 'Jets d’étincelles froides de part et d’autre de la piste', option: 'OPTION JETS D’ÉTINCELLES · 50 €' },
+  { titre: 'Dancefloor', img: '/images/moment-dancefloor.webp', alt: 'Invités qui dansent bras levés sur la piste', option: 'INCLUS DANS TOUTES LES FORMULES' },
+];
+---
+<section class="deroule" aria-labelledby="tl-titre">
+  <div class="container wrap">
+    <div class="tete">
+      <span class="eyebrow">Le déroulé de la journée</span>
+      <h2 id="tl-titre" class="titre">{titre}<br class="br" /> <span class="or">{titreOr}</span></h2>
+      <p class="intro">{intro}</p>
+      <span class="glisser" aria-hidden="true">FAITES GLISSER · 6 TEMPS FORTS
+        <svg width="22" height="10" viewBox="0 0 22 10" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M0 5h20M16 1l4 4-4 4"/></svg>
+      </span>
+    </div>
+
+    <ol class="frise" aria-label="Les 6 temps forts de la journée">
+      {etapes.map((e, i) => (
+        <li class="etape">
+          <span class="point" aria-hidden="true"></span>
+          <div class="carte">
+            <img src={e.img} alt={e.alt} loading="lazy" style={e.pos ? `object-position: ${e.pos}` : undefined} />
+            <div class="c-txt">
+              <span class="num">{String(i + 1).padStart(2, '0')}</span>
+              <h3>{e.titre}</h3>
+              <p>{textes[i]}</p>
+              <span class="option">{e.option}</span>
+            </div>
+          </div>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<style>
+  .deroule { background: #1b1511; color: #fff; padding: var(--section-y) 0; }
+  .wrap { display: flex; flex-direction: column; gap: 32px; }
+  .tete { display: flex; flex-direction: column; gap: 16px; }
+  .eyebrow { color: var(--gold); }
+  .titre { font-size: 30px; line-height: 1.08; }
+  .br { display: none; }
+  .or { color: var(--gold); }
+  .intro { max-width: 720px; font-size: 15px; line-height: 1.7; color: rgba(255,255,255,.85); }
+  .glisser { display: flex; align-items: center; gap: 10px; font-size: 13px; letter-spacing: 1px; color: var(--gold); }
+
+  /* Mobile : défilement horizontal */
+  .frise {
+    margin: 0 calc(var(--gutter) * -1); padding: 0 var(--gutter) 6px; list-style: none;
+    display: flex; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding: 0 var(--gutter); scrollbar-width: none;
+  }
+  .frise::-webkit-scrollbar { display: none; }
+  .etape { flex: 0 0 84%; scroll-snap-align: start; display: flex; }
+  .point { display: none; }
+  .carte { display: flex; flex-direction: column; gap: 12px; padding: 12px 12px 16px; background: rgba(255,255,255,.04); border: 1px solid rgba(219,167,100,.25); border-radius: 12px; }
+  .carte img { width: 100%; height: 180px; flex-shrink: 0; object-fit: cover; border-radius: 8px; }
+  .c-txt { display: flex; flex-direction: column; gap: 8px; padding: 0 4px; }
+  .num { font-family: var(--serif); font-size: 26px; line-height: 1; color: var(--gold); }
+  h3 { font-size: 24px; line-height: 1.15; }
+  .c-txt p { font-size: 15px; line-height: 1.6; color: rgba(255,255,255,.85); }
+  .option { font-size: 12px; letter-spacing: 1px; color: var(--gold); }
+
+  /* Tablette : frise verticale à gauche */
+  @media (min-width: 768px) {
+    .wrap { gap: 40px; }
+    .titre { font-size: 40px; }
+    .br { display: inline; }
+    .intro { font-size: 16px; }
+    .glisser { display: none; }
+    .frise { position: relative; margin: 0; padding: 0; overflow: visible; flex-direction: column; gap: 24px; }
+    .frise::before { content: ''; position: absolute; left: 6px; top: 30px; bottom: 30px; width: 1px; background: rgba(219,167,100,.5); }
+    .etape { display: grid; grid-template-columns: 14px minmax(0, 1fr); gap: 0 24px; align-items: start; }
+    .point { display: block; position: relative; z-index: 1; margin-top: 24px; width: 14px; height: 14px; border-radius: 50%; background: var(--gold); box-shadow: 0 0 0 6px #1b1511; }
+    .carte { flex-direction: row; align-items: center; gap: 20px; padding: 20px; }
+    .carte img { width: 200px; height: 150px; }
+    .c-txt { padding: 0; }
+    .num { font-size: 30px; }
+    h3 { font-size: 26px; }
+  }
+
+  /* Ordinateur : zigzag, une carte à gauche, une à droite */
+  @media (min-width: 1200px) {
+    .wrap { gap: 56px; }
+    .titre { font-size: 52px; }
+    .frise { gap: 0; }
+    .frise::before { left: 50%; top: 40px; bottom: 40px; }
+    .etape { grid-template-columns: minmax(0, 1fr) 40px minmax(0, 1fr); gap: 0 28px; align-items: center; }
+    .etape + .etape { margin-top: -64px; }
+    .point { grid-column: 2; grid-row: 1; justify-self: center; margin-top: 0; }
+    .carte { grid-column: 1; grid-row: 1; gap: 24px; }
+    .etape:nth-child(even) .carte { grid-column: 3; flex-direction: row-reverse; }
+    .carte img { height: 160px; }
+    h3 { font-size: 28px; }
+  }
+</style>

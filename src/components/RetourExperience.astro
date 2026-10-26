@@ -1,0 +1,61 @@
+---
+// src/components/RetourExperience.astro — un mariage réel raconté (photo + récit + citation).
+// Pour l'instant : le Gîte de la Colombière sur la page Lyon.
+interface Props {
+  image: string;
+  alt: string;
+  lieu: string;          // titre (nom du lieu)
+  situation: string;     // petite ligne sous le titre
+  paragraphes: string[];
+  citation: string;
+  points: string[];
+  photographe?: { nom: string; lien: string };
+}
+const { image, alt, lieu, situation, paragraphes, citation, points, photographe } = Astro.props;
+---
+<section class="section bg-cream" aria-labelledby="retour-titre">
+  <div class="container retour">
+    <img src={image} alt={alt} loading="lazy" />
+    <div class="txt">
+      <span class="eyebrow">Retour d’expérience</span>
+      <h2 id="retour-titre" class="titre">{lieu}</h2>
+      <span class="situation">{situation}</span>
+      {paragraphes.map((p) => <p>{p}</p>)}
+      <blockquote>«&nbsp;{citation}&nbsp;»</blockquote>
+      <ul>
+        {points.map((pt) => (
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C9944F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 12 5 5L20 6"/></svg>{pt}</li>
+        ))}
+      </ul>
+      {photographe && <span class="credit">Photographe : <a href={photographe.lien} target="_blank" rel="noopener">{photographe.nom}</a></span>}
+    </div>
+  </div>
+</section>
+
+<style>
+  .retour { display: flex; flex-direction: column; gap: 24px; }
+  .retour img { width: 100%; height: 240px; object-fit: cover; object-position: 52% 35%; border-radius: 8px; }
+  .txt { display: flex; flex-direction: column; gap: 16px; --t: 15px; }
+  .titre { font-size: 28px; line-height: 1.15; }
+  .situation { margin-top: -8px; font-size: 13px; letter-spacing: 1px; color: var(--muted); }
+  p { font-size: var(--t); line-height: 1.7; color: var(--text); }
+  blockquote { margin: 4px 0 0; padding-left: 16px; border-left: 2px solid var(--gold); font-family: var(--serif); font-size: calc(var(--t) + 5px); line-height: 1.4; }
+  ul { margin: 4px 0 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: 10px 24px; font-size: var(--t); }
+  li { display: flex; align-items: center; gap: 10px; }
+  li svg { flex-shrink: 0; }
+  .credit { font-size: 13px; color: var(--muted); }
+  .credit a { color: var(--ink); }
+
+  @media (min-width: 768px) {
+    .retour { gap: 32px; }
+    .retour img { height: 340px; object-position: 50% 30%; }
+    .txt { --t: 16px; }
+    .titre { font-size: 34px; }
+  }
+  @media (min-width: 1200px) {
+    .retour { display: grid; grid-template-columns: 560px minmax(0, 1fr); gap: 64px; align-items: stretch; }
+    .retour img { height: 100%; min-height: 420px; object-position: 52% 50%; }
+    .txt { --t: 17px; }
+    .titre { font-size: 40px; }
+  }
+</style>

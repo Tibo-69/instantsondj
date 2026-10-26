@@ -1,0 +1,72 @@
+---
+// src/pages/dj-mariage-besancon.astro — page DJ mariage Besançon (adresse : /dj-mariage-besancon)
+// Même structure que la page Lyon, textes et communes du Doubs.
+import Layout from '../layouts/Layout.astro';
+import Hero from '../components/Hero.astro';
+import ZoneVille from '../components/ZoneVille.astro';
+import Deroule from '../components/Deroule.astro';
+import Preparation from '../components/Preparation.astro';
+import Avis from '../components/Avis.astro';
+import Faq from '../components/Faq.astro';
+import CtaDevis from '../components/CtaDevis.astro';
+import { faqMariagePour } from '../data/faq';
+---
+<Layout
+  title="DJ mariage Besançon | DJ Tiako, DJ dans le Doubs"
+  description="DJ mariage à Besançon et dans tout le Doubs : cérémonie, vin d’honneur, repas et soirée dansante. Déplacement inclus jusqu’à 70 km aller-retour depuis Besançon."
+  page="mariage"
+>
+  <Hero
+    h1="DJ Mariage à Besançon"
+    image="/images/mariage-hero.webp"
+    intro="J’accompagne votre mariage à Besançon, à École-Valentin et dans tout le Doubs, de la préparation jusqu’à la dernière danse sur la piste."
+    introCourt="De la préparation jusqu’à la dernière danse."
+  >
+    Votre DJ de mariage<br class="br-large" /> <span class="or">au cœur de Besançon</span>
+  </Hero>
+
+  <ZoneVille
+    eyebrow="DJ mariage à Besançon"
+    titre="Votre DJ à Besançon et dans le Doubs"
+    paragraphes={[
+      'J’anime vos mariages à Besançon et dans tout le Doubs. Formé en alternance à l’UCPA École des DJ, j’ai plusieurs années d’expérience en mariage, notamment comme DJ résident d’un domaine de réception. Ma règle d’or : anticiper chaque temps fort pour que votre soirée vous ressemble.',
+      'J’interviens à Besançon, à École-Valentin et dans tout le département. Déplacement inclus jusqu’à 70 km aller-retour depuis Besançon.',
+    ]}
+    communes={['Besançon', 'École-Valentin', 'Châtillon-le-Duc', 'Saint-Vit', 'Ornans', 'Doubs', 'Jura', 'Haute-Saône']}
+  />
+
+  <Deroule
+    titre="Votre mariage dans le Doubs,"
+    titreOr="du oui à la dernière danse"
+    intro="De la cérémonie au dernier morceau, voici comment je vous accompagne tout au long de votre mariage à Besançon et dans le Doubs."
+    textes={[
+      'Pour une cérémonie laïque dans un jardin ou un domaine du Doubs, deux enceintes et deux micros sans fil portent chaque mot jusqu’au dernier rang.',
+      'Une enceinte autonome sur batterie suit votre cocktail, même loin de la salle : une musique discrète pendant les photos et les retrouvailles.',
+      'Le morceau de votre entrée, choisi ensemble, et une salle habillée de lumière : le signal que la fête commence.',
+      'Une musique d’ambiance pendant le dîner, des micros prêts pour les discours et les surprises de vos proches, au rythme du service.',
+      'Une première danse préparée sur mesure, morceau original ou mashup, avec jeux de lumière et jets d’étincelles en option.',
+      'Une programmation construite avec vous et ajustée en direct selon l’énergie de la piste, avec machine à brouillard et régie lumière.',
+    ]}
+  />
+
+  <Preparation
+    variante="ville"
+    image="/images/mariage-installation.webp"
+    alt="DJ Tiako installé face à la salle de réception"
+    titre="Chaque détail anticipé"
+    paragraphes={[
+      'Ma règle d’or : l’anticipation. Avant le mariage, on échange sur votre déroulé, les musiques qui comptent pour vous et vos styles préférés.',
+      'Je tiens compte des contraintes de votre lieu de réception, à Besançon ou ailleurs dans le Doubs : horaires, configuration de la salle, limiteur de son éventuel. Et je me coordonne avec vos autres prestataires.',
+    ]}
+    points={['Déroulement personnalisé', 'Installation adaptée au lieu', 'Coordination avec les intervenants']}
+  />
+
+  <Avis liste="besancon" />
+  <Faq questions={faqMariagePour('besancon')} />
+  <CtaDevis />
+</Layout>
+
+<style>
+  .br-large { display: none; }
+  @media (min-width: 768px) { .br-large { display: inline; } }
+</style>

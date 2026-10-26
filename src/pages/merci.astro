@@ -1,0 +1,26 @@
+---
+// src/pages/merci.astro — page affichée après l'envoi du devis
+// quand le JavaScript est désactivé (sinon le message s'affiche directement sur /devis).
+// noindex : Google ne doit pas l'afficher dans ses résultats.
+import Layout from '../layouts/Layout.astro';
+---
+<Layout title="Demande envoyée | DJ Tiako" description="Votre demande de devis a bien été envoyée." noindex>
+  <section class="section">
+    <div class="container merci" role="status">
+      <span class="ok"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m4 12 5 5L20 6"/></svg></span>
+      <h1>Votre demande de devis a bien été envoyée</h1>
+      <p>Merci pour votre demande. Je reviendrai vers vous dans les meilleurs délais afin d’échanger autour de votre événement et de votre projet musical.</p>
+      <p>À très bientôt&nbsp;!</p>
+      <a class="btn btn-dark" href="/">RETOUR AU SITE</a>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .merci { display: flex; flex-direction: column; align-items: center; gap: 16px; text-align: center; padding-top: 24px; padding-bottom: 24px; }
+  .ok { width: 56px; height: 56px; border-radius: 50%; border: 1px solid #5e7b52; display: flex; align-items: center; justify-content: center; color: #5e7b52; }
+  h1 { font-size: 32px; }
+  p { max-width: 520px; font-size: 16px; line-height: 1.6; }
+  .btn { margin-top: 8px; }
+  @media (min-width: 768px) { h1 { font-size: 40px; } }
+</style>

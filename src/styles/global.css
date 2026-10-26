@@ -97,7 +97,10 @@ p { margin: 0; }
 .link-arrow {
   display: inline-flex; align-items: center; gap: 12px; min-height: 44px;
   font-size: 13px; font-weight: 500; letter-spacing: 1px; color: var(--ink);
+  text-decoration: none;
 }
+.link-arrow .u { text-decoration: underline; text-underline-offset: 3px; }
+.link-arrow:hover { color: var(--gold-text); }
 
 /* Accessibilité : texte lu par les lecteurs d'écran mais invisible */
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }

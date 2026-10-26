@@ -1,0 +1,95 @@
+---
+// src/components/Preparation.astro — « Préparation et installation » (photo + texte + liste).
+// Réutilisable sur les pages Lyon / Besançon avec d'autres textes :
+// variante="ville" → texte à gauche, photo à droite (et dessous sur mobile), coins arrondis.
+interface Props {
+  image: string;
+  alt: string;
+  eyebrow?: string;
+  titre?: string;
+  paragraphes?: string[];
+  points?: string[];
+  variante?: 'mariage' | 'ville';
+}
+const {
+  image, alt,
+  eyebrow = 'Préparation et installation',
+  titre = 'Tout est pensé en amont',
+  paragraphes = [
+    'Avant le jour J, nous échangeons sur le déroulement de votre mariage, vos envies musicales et les moments importants de votre journée.',
+    'La préparation permet ensuite d’adapter la programmation, la sonorisation et l’installation au lieu et à votre réception, pour que tout soit prêt et fluide le jour venu.',
+  ],
+  points = ['Déroulement personnalisé', 'Installation adaptée', 'Coordination avec les intervenants'],
+  variante = 'mariage',
+} = Astro.props;
+---
+<section class="section">
+  <div class={`container prep ${variante}`}>
+    <img src={image} alt={alt} loading="lazy" />
+    <div class="txt">
+      <span class="eyebrow">{eyebrow}</span>
+      <h2 class="titre">{titre}</h2>
+      <div class="paras">{paragraphes.map((p) => <p>{p}</p>)}</div>
+      <span class="sep" aria-hidden="true"></span>
+      <ul>
+        {points.map((pt) => (
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C9944F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 12 5 5L20 6"/></svg>{pt}</li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</section>
+
+<style>
+  .prep { display: flex; flex-direction: column; gap: 28px; }
+  .prep img { width: 100%; height: 240px; object-fit: cover; }
+  .txt { display: flex; flex-direction: column; gap: 16px; }
+  .titre { font-size: 32px; line-height: 1.15; }
+  .paras { display: flex; flex-direction: column; gap: 16px; }
+  .paras p, ul { font-size: 16px; line-height: 1.6; }
+  .sep { width: 160px; height: 1px; background: var(--line); }
+  ul { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 14px; }
+  li { display: flex; align-items: center; gap: 14px; line-height: 1.3; }
+  li svg { flex-shrink: 0; }
+
+  @media (min-width: 768px) {
+    .prep { gap: 32px; }
+    .prep img { height: 380px; }
+    .txt { gap: 18px; }
+    .titre { font-size: 38px; }
+    .paras { gap: 0; } /* sur grand écran, les 2 paragraphes se suivent sans espace */
+    .paras p, ul { font-size: 17px; }
+    .sep { width: 280px; }
+  }
+  @media (min-width: 1200px) {
+    .prep { display: grid; grid-template-columns: 660px minmax(0, 1fr); gap: 56px; align-items: stretch; }
+    .prep img { height: 100%; min-height: 420px; }
+    .txt { gap: 20px; }
+    .titre { font-size: 44px; }
+    .paras p, ul { font-size: 18px; }
+    .sep { width: 340px; }
+  }
+
+  /* --- Variante « ville » (pages Lyon / Besançon) --- */
+  .ville { gap: 32px; }
+  .ville .txt { order: -1; justify-content: center; gap: 18px; }
+  .ville img { border-radius: 8px; }
+  .ville .titre { font-size: 28px; line-height: 1.12; }
+  .ville .paras { gap: 18px; }
+  .ville .paras p { line-height: 1.7; color: var(--text); }
+  .ville .sep { display: none; }
+  .ville ul { margin-top: 6px; gap: 12px; font-size: 16px; }
+  .ville li { gap: 12px; }
+  @media (min-width: 768px) {
+    .ville img { height: 340px; }
+    .ville .titre { font-size: 34px; }
+    .ville .paras { gap: 18px; }
+    .ville ul { font-size: 17px; }
+  }
+  @media (min-width: 1200px) {
+    .ville { grid-template-columns: minmax(0, 1fr) 560px; gap: 64px; }
+    .ville img { height: 100%; min-height: 460px; }
+    .ville .titre { font-size: 44px; }
+    .ville ul { font-size: 17px; }
+  }
+</style>

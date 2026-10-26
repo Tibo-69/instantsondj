@@ -20,7 +20,7 @@ const { questions } = Astro.props;
             <span class="q">{item.q}</span>
             <span class="ico" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
           </summary>
-          <div class="r">{item.r.map((p) => <p>{p}</p>)}</div>
+          <div class="r">{item.r.map((p) => <p set:html={p} />)}</div>
         </details>
       ))}
     </div>
@@ -41,6 +41,7 @@ const { questions } = Astro.props;
   summary:hover .q { color: var(--gold-text); }
   .ico { flex-shrink: 0; width: 36px; height: 36px; border: 1px solid var(--gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: transform .15s; }
   details[open] .ico { background: var(--ink); border-color: var(--ink); color: #fff; transform: rotate(45deg); }
+  .r :global(a) { color: var(--ink); text-underline-offset: 3px; }
   .r { padding: 0 0 24px; display: flex; flex-direction: column; gap: 12px; font-size: 15px; line-height: 1.7; color: var(--text); }
   @media (min-width: 768px) { .titre { font-size: 38px; } .q { font-size: 24px; } .r { padding-right: 56px; font-size: 16px; } .tete p { font-size: 16px; } }
   @media (min-width: 1200px) { .grille { display: grid; grid-template-columns: 400px minmax(0, 1fr); gap: 80px; align-items: start; } .titre { font-size: 44px; } .q { font-size: 26px; } }

@@ -1,0 +1,347 @@
+---
+// src/pages/a-propos.astro — page À propos (adresse : /a-propos)
+// Haut de page avec photo de Tiako, parcours (frise 2019 → 2025),
+// vidéos (liens vers Instagram en attendant les vraies vidéos), bloc Instagram, bloc devis.
+import Layout from '../layouts/Layout.astro';
+import CtaDevis from '../components/CtaDevis.astro';
+import { site } from '../data/site';
+
+const photos = [
+  { src: '/images/apropos-set.webp', alt: 'DJ Tiako en set sous les projecteurs' },
+  { src: '/images/apropos-salle.webp', alt: 'DJ Tiako face à une salle en fête' },
+  { src: '/images/apropos-exterieur.webp', alt: 'DJ Tiako mixant en extérieur' },
+];
+
+const icones: Record<string, string> = {
+  casque: '<path d="M3 14v-2a9 9 0 0 1 18 0v2"/><path d="M21 15a2 2 0 0 1-2 2h-1v-6h1a2 2 0 0 1 2 2zM3 15a2 2 0 0 0 2 2h1v-6H5a2 2 0 0 0-2 2z"/>',
+  diplome: '<path d="M2 9.5 12 4.5l10 5-10 5z"/><path d="M6 11.5V16c0 1.5 2.7 3 6 3s6-1.5 6-3v-4.5"/><path d="M22 9.5V15"/>',
+  vinyle: '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/><path d="M12 5a7 7 0 0 1 7 7"/>',
+  duo: '<circle cx="9" cy="8" r="4"/><path d="M2 21a7 7 0 0 1 14 0"/><path d="M16 4a4 4 0 0 1 0 8M22 21a7 7 0 0 0-4-6.3"/>',
+  barres: '<rect x="4" y="13" width="4" height="8" rx="1"/><rect x="10" y="8" width="4" height="13" rx="1"/><rect x="16" y="3" width="4" height="18" rx="1"/>',
+};
+const parcours = [
+  { annee: '2019', titre: 'Les premiers pas derrière les platines', texte: 'Premières prestations en Normandie, d’où je suis originaire', ico: 'casque' },
+  { annee: '2021', titre: 'Une formation pour aller plus loin', texte: 'J’intègre l’UCPA École pour perfectionner ma technique', ico: 'diplome' },
+  { annee: '2022-2023', titre: 'Deux années au rythme des événements', texte: 'Je deviens DJ résident dans un domaine de réception', ico: 'vinyle' },
+  { annee: '2024', titre: 'Transmettre ma passion', texte: 'Je deviens tuteur d’un alternant DJ et partage mon savoir-faire', ico: 'duo' },
+  { annee: '2025', titre: 'Un nouveau chapitre à Lyon', texte: 'Je me tourne vers les scènes publiques lyonnaises', ico: 'barres' },
+];
+
+// TODO : remplacer les liens Instagram par les vraies vidéos de Tibo quand on les aura.
+const videos = [
+  { titre: 'Live set — soirée privée', tag: 'LIVE', img: '/images/apropos-set.webp' },
+  { titre: 'Ouverture du bal', tag: 'MARIAGE', img: '/images/option-etincelles.webp' },
+  { titre: 'Soirée d’entreprise', tag: 'ÉVÉNEMENT', img: '/images/evenements-entreprise.webp' },
+  { titre: 'La piste est pleine', tag: 'ANNIVERSAIRE', img: '/images/apropos-salle.webp' },
+  { titre: 'Mix en extérieur', tag: 'LIVE', img: '/images/apropos-exterieur.webp' },
+];
+---
+<Layout
+  title="DJ Tiako, DJ à Lyon | À propos"
+  description="DJ professionnel basé à Villeurbanne depuis 2019 : parcours, univers musical et vidéos de DJ Tiako."
+  page="apropos"
+>
+  <!-- ===== Haut de page ===== -->
+  <section class="hero">
+    <div class="container h-grille">
+      <span class="vide" aria-hidden="true"></span>
+      <div class="h-txt">
+        <span class="h-eyebrow"><i aria-hidden="true"></i>À propos de DJ Tiako</span>
+        <h1>Une passion pour la musique, des <span class="or">souvenirs</span> pour la vie</h1>
+        <div class="h-paras">
+          <p>DJ professionnel basé à Lyon, je mets ma passion de la musique au service de vos plus beaux événements&nbsp;: mariages, anniversaires, soirées privées et événements d’entreprises.</p>
+          <p>Mon objectif est simple&nbsp;: créer une ambiance unique, à votre image, et faire de chaque moment un souvenir inoubliable.</p>
+        </div>
+        <div class="boutons" data-hero-cta>
+          <a class="btn btn-dark" href="/devis">DISCUTER DE VOTRE PROJET</a>
+          <a class="btn btn-light" href={site.telLien}>{site.telAffiche}</a>
+        </div>
+      </div>
+      <!-- 3 photos : en ligne sur tablette / ordinateur, une par une sur mobile -->
+      <div class="photos" data-defile>
+        <ul class="p-liste">
+          {photos.map((p) => <li><img src={p.src} alt={p.alt} /></li>)}
+        </ul>
+        <div class="nav" aria-hidden="true">
+          <span class="points">{photos.map((_, i) => <i class={i === 0 ? 'actif' : ''}></i>)}</span>
+          <span class="fleches">
+            <button class="fl prec" type="button" tabindex="-1" disabled><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="m15 6-6 6 6 6"/></svg></button>
+            <button class="fl suiv" type="button" tabindex="-1"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg></button>
+          </span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Mon parcours ===== -->
+  <section class="section bg-cream">
+    <div class="container parcours">
+      <div class="pa-txt">
+        <span class="eyebrow">Mon parcours</span>
+        <h2 class="titre">Un DJ, une histoire, une vocation</h2>
+        <p>Depuis toujours, la musique fait partie de ma vie. Ce qui a commencé par une passion s’est rapidement transformé en un véritable projet de vie.</p>
+        <p>Après plusieurs années à mixer lors de mes soirées étudiantes, j’ai eu la chance de me produire dans de nombreux événements privés et professionnels à Lyon et dans toute la région. Chaque événement est pour moi une nouvelle rencontre, une nouvelle histoire à raconter en musique.</p>
+        <img class="signature" src="/images/apropos-signature.webp" alt="La musique rassemble les gens" loading="lazy" />
+      </div>
+      <span class="filet" aria-hidden="true"></span>
+      <ol class="frise">
+        {parcours.map((e) => (
+          <li>
+            <span class="ico"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" set:html={icones[e.ico]} /></span>
+            <span class="pt" aria-hidden="true"></span>
+            <div class="e-txt"><span class="annee">{e.annee}</span><span class="e-titre">{e.titre}</span><span class="e-desc">{e.texte}</span></div>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <!-- ===== Vidéos ===== -->
+  <section class="videos">
+    <div class="container v-wrap">
+      <div class="v-tete">
+        <span class="eyebrow">Mon univers en vidéo</span>
+        <h2 class="titre">Plongez dans l’ambiance</h2>
+        <p>Quelques vidéos pour découvrir mon univers, mon énergie et ma manière de faire vivre mes sets.</p>
+      </div>
+      <div class="v-grille">
+        {videos.map((v, i) => (
+          <a class={`tuile t${i + 1}`} href={site.instagram} target="_blank" rel="noopener" aria-label={`Voir la vidéo « ${v.titre} » sur Instagram`}>
+            <img src={v.img} alt="" loading="lazy" />
+            <span class="voile" aria-hidden="true"></span>
+            <span class="tag">{v.tag}</span>
+            <span class="lecture" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5v15l12.5-7.5z"/></svg></span>
+            <span class="v-titre">{v.titre}</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Instagram ===== -->
+  <section class="insta">
+    <div class="container i-wrap">
+      <div class="i-bloc">
+        <svg class="i-ico" viewBox="0 0 24 24" fill="none" stroke="#111111" stroke-width="1.6" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="#111111"/></svg>
+        <div class="i-txt">
+          <span class="i-titre">Suivez-moi sur Instagram</span>
+          <span>Des extraits de mes sets, des foules en pleine ambiance,<br class="br-desk" /> des moments de partage et des souvenirs capturés en direct</span>
+        </div>
+        <a class="i-btn" href={site.instagram} target="_blank" rel="noopener">@DJ_TIAKO</a>
+      </div>
+      <p>Retrouvez-moi sur Instagram pour découvrir mes actualités, mes prestations et mes nouveaux contenus.</p>
+    </div>
+  </section>
+
+  <CtaDevis />
+</Layout>
+
+<script>
+  // Mobile : photos une par une, avec points et flèches.
+  document.querySelectorAll<HTMLElement>('[data-defile]').forEach((bloc) => {
+    const liste = bloc.querySelector<HTMLElement>('.p-liste')!;
+    const items = [...liste.children] as HTMLElement[];
+    const points = [...bloc.querySelectorAll<HTMLElement>('.points i')];
+    const prec = bloc.querySelector<HTMLButtonElement>('.prec')!;
+    const suiv = bloc.querySelector<HTMLButtonElement>('.suiv')!;
+    let actuel = 0;
+    const maj = () => {
+      const w = liste.clientWidth || 1;
+      actuel = Math.round(liste.scrollLeft / w);
+      points.forEach((p, k) => p.classList.toggle('actif', k === actuel));
+      prec.disabled = actuel === 0;
+      suiv.disabled = actuel === items.length - 1;
+    };
+    const aller = (i: number) => liste.scrollTo({ left: items[Math.max(0, Math.min(items.length - 1, i))].offsetLeft, behavior: 'smooth' });
+    prec.addEventListener('click', () => aller(actuel - 1));
+    suiv.addEventListener('click', () => aller(actuel + 1));
+    liste.addEventListener('scroll', () => requestAnimationFrame(maj), { passive: true });
+    maj();
+  });
+</script>
+
+<style>
+  .br-desk { display: none; }
+  .or { color: var(--gold); }
+
+  /* ===== Haut de page ===== */
+  .hero {
+    color: #fff;
+    background:
+      linear-gradient(180deg, rgba(18,13,8,.55) 0%, rgba(18,13,8,.75) 50%, rgba(18,13,8,.92) 100%),
+      url('/images/apropos-hero-mobile.webp') 60% center / cover no-repeat, #120d08;
+  }
+  .vide { display: none; }
+  .h-txt { padding: 56px 0 24px; display: flex; flex-direction: column; gap: 16px; }
+  .h-eyebrow { display: flex; align-items: center; gap: 12px; font-family: var(--serif); font-size: 22px; color: var(--gold); }
+  .h-eyebrow i { width: 32px; height: 1px; background: var(--gold); flex-shrink: 0; }
+  h1 { font-size: 32px; line-height: 1.15; }
+  .h-paras { display: flex; flex-direction: column; gap: 16px; font-size: 16px; line-height: 1.6; color: rgba(255,255,255,.92); }
+  .boutons { margin-top: 8px; display: flex; flex-direction: column; gap: 12px; }
+
+  /* Photos : mobile = une par une */
+  .photos { padding: 8px 0 36px; display: flex; flex-direction: column; gap: 16px; }
+  .p-liste { margin: 0; padding: 0; list-style: none; display: flex; gap: 16px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; }
+  .p-liste::-webkit-scrollbar { display: none; }
+  .p-liste li { flex: 0 0 100%; scroll-snap-align: start; scroll-snap-stop: always; }
+  .p-liste img { width: 100%; height: 220px; object-fit: cover; }
+  .nav { display: flex; align-items: center; justify-content: space-between; }
+  .points { display: flex; gap: 8px; }
+  .points i { width: 6px; height: 4px; border-radius: 2px; background: rgba(255,255,255,.35); transition: width .2s, background .2s; }
+  .points i.actif { width: 16px; background: var(--gold); }
+  .fleches { display: flex; gap: 8px; }
+  .fl { width: 40px; height: 40px; border-radius: 50%; border: 1px solid #fff; background: transparent; color: #fff; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+  .fl:disabled { border-color: rgba(255,255,255,.3); color: rgba(255,255,255,.35); cursor: default; }
+
+  /* ===== Parcours ===== */
+  .parcours { display: flex; flex-direction: column; gap: 32px; }
+  .pa-txt { display: flex; flex-direction: column; gap: 14px; }
+  .titre { font-size: 32px; line-height: 1.15; }
+  .pa-txt p { font-size: 16px; line-height: 1.6; }
+  .signature { align-self: center; width: 220px; }
+  .filet { display: none; }
+  .frise { position: relative; margin: 0; background: #fff; border-radius: 16px; padding: 24px 20px; list-style: none; display: flex; flex-direction: column; gap: 26px; }
+  .frise::before { content: ''; position: absolute; left: 39px; top: 32px; bottom: 32px; width: 1px; background: var(--gold); }
+  .frise li { display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: 16px; align-items: start; }
+  .ico { position: relative; width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--gold); background: #efeae6; display: flex; align-items: center; justify-content: center; }
+  .ico svg { width: 20px; height: 20px; }
+  .pt { display: none; }
+  .e-txt { display: flex; flex-direction: column; gap: 4px; }
+  .annee { font-size: 16px; color: var(--gold-text); }
+  .e-titre { font-size: 16px; }
+  .e-desc { font-size: 13px; line-height: 1.4; color: var(--text); }
+
+  /* ===== Vidéos ===== */
+  .videos { padding: 56px 0 24px; }
+  .v-wrap { display: flex; flex-direction: column; gap: 24px; }
+  .v-tete { display: flex; flex-direction: column; gap: 14px; }
+  .v-tete p { font-size: 16px; line-height: 1.6; }
+  .v-grille { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: 210px 120px 120px; gap: 12px; }
+  .tuile { position: relative; overflow: hidden; border-radius: 8px; background: var(--night); color: #fff; text-decoration: none; }
+  .t1 { grid-column: 1 / 3; }
+  .tuile img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform .4s; }
+  .voile { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(10,8,6,.05) 0%, rgba(10,8,6,.15) 50%, rgba(10,8,6,.8) 100%); }
+  .tag { position: absolute; top: 12px; left: 12px; padding: 5px 10px; border-radius: 4px; background: rgba(17,17,17,.7); font-size: 11px; letter-spacing: 1px; }
+  .lecture { position: absolute; top: 50%; left: 50%; width: 40px; height: 40px; transform: translate(-50%, -50%); border: 1px solid var(--gold); border-radius: 50%; background: rgba(17,17,17,.55); color: var(--gold); display: flex; align-items: center; justify-content: center; transition: transform .2s, background .2s, color .2s; }
+  .lecture svg { width: 18px; height: 18px; margin-left: 3px; }
+  .t1 .lecture { width: 60px; height: 60px; }
+  .t1 .lecture svg { width: 26px; height: 26px; }
+  .v-titre { position: absolute; left: 10px; right: 10px; bottom: 8px; font-family: var(--serif); font-size: 16px; line-height: 1.1; }
+  .t1 .v-titre { left: 14px; bottom: 12px; font-size: 22px; }
+  .tuile:hover img { transform: scale(1.03); }
+  .tuile:hover .lecture { transform: translate(-50%, -50%) scale(1.08); background: rgba(219,167,100,.9); color: var(--ink); }
+
+  /* ===== Instagram ===== */
+  .insta { padding: 0 0 56px; }
+  .i-wrap { display: flex; flex-direction: column; gap: 24px; }
+  .i-bloc { background: var(--cream-2); border-radius: 16px; padding: 24px 20px; display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 16px 14px; align-items: center; }
+  .i-ico { width: 44px; height: 44px; }
+  .i-txt { display: contents; }
+  .i-titre { font-size: 18px; }
+  .i-txt span:last-child { grid-column: 1 / -1; font-size: 15px; line-height: 1.6; }
+  .i-btn { grid-column: 1 / -1; height: 48px; border: 1px solid var(--ink); display: flex; align-items: center; justify-content: center; text-decoration: none; color: var(--ink); font-size: 13px; letter-spacing: .5px; }
+  .i-btn:hover { background: var(--ink); color: #fff; }
+  .i-wrap > p { font-size: 16px; line-height: 1.6; }
+
+  /* ===== Tablette ===== */
+  @media (min-width: 768px) {
+    .hero {
+      background:
+        linear-gradient(180deg, rgba(18,13,8,.55) 0%, rgba(18,13,8,.7) 55%, rgba(18,13,8,.9) 100%),
+        url('/images/apropos-hero-mobile.webp') center / cover no-repeat, #120d08;
+    }
+    .h-txt { padding: 72px 0 8px; gap: 18px; }
+    .h-eyebrow { font-size: 24px; }
+    .h-eyebrow i { width: 40px; }
+    h1 { font-size: 34px; }
+    .h-paras { gap: 18px; }
+    .boutons { margin-top: 6px; flex-direction: row; flex-wrap: wrap; }
+    .photos { padding: 32px 0 40px; }
+    .p-liste { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); overflow: visible; }
+    .p-liste img { height: 150px; }
+    .nav { display: none; }
+
+    .parcours { gap: 40px; }
+    .pa-txt { gap: 16px; }
+    .titre { font-size: 38px; }
+    .pa-txt p { font-size: 17px; }
+    .signature { width: 240px; }
+    .frise { padding: 32px; gap: 30px; }
+    .frise::before { left: 117px; top: 40px; bottom: 40px; }
+    .frise li { grid-template-columns: 60px 16px minmax(0, 1fr); gap: 18px; align-items: center; }
+    .ico { width: 60px; height: 60px; }
+    .ico svg { width: 26px; height: 26px; }
+    .pt { display: block; position: relative; width: 16px; height: 16px; border-radius: 50%; background: var(--gold); }
+    .annee { font-size: 17px; color: var(--gold); }
+
+    .videos { padding: 72px 0 32px; }
+    .v-wrap { gap: 32px; }
+    .v-tete p { font-size: 17px; }
+    .v-grille { grid-template-rows: 380px 180px 180px; gap: 16px; }
+    .lecture { width: 60px; height: 60px; }
+    .lecture svg { width: 26px; height: 26px; }
+    .v-titre { left: 18px; bottom: 14px; font-size: 20px; }
+    .t1 .v-titre { left: 24px; bottom: 18px; font-size: 28px; }
+
+    .insta { padding: 0 0 72px; }
+    .i-wrap { gap: 28px; }
+    .i-bloc { padding: 28px; grid-template-columns: 66px minmax(0, 1fr); gap: 20px; }
+    .i-ico { width: 66px; height: 66px; }
+    .i-txt { display: flex; flex-direction: column; gap: 8px; }
+    .i-txt span:last-child { font-size: 15px; }
+    .i-wrap > p { font-size: 17px; }
+  }
+
+  /* ===== Ordinateur ===== */
+  @media (min-width: 1200px) {
+    .hero {
+      background:
+        linear-gradient(90deg, rgba(18,13,8,0) 0%, rgba(18,13,8,0) 28%, rgba(18,13,8,.35) 40%, rgba(18,13,8,.35) 100%),
+        url('/images/apropos-hero.webp') center / cover no-repeat, #120d08;
+    }
+    /* colonne vide à gauche = la place de Tiako sur la photo */
+    .h-grille { display: grid; grid-template-columns: 445px minmax(0, 1fr); min-height: 642px; padding-left: 0; }
+    .vide { display: block; grid-row: 1 / 3; }
+    .h-txt { padding: 80px 20px 4px 0; gap: 22px; }
+    .h-eyebrow { gap: 14px; font-size: 34px; }
+    .h-eyebrow i { width: 66px; }
+    h1 { font-size: 36px; }
+    .h-paras { max-width: 690px; gap: 4px; font-size: 18px; }
+    .boutons { margin-top: 0; gap: 20px; }
+    .photos { grid-column: 2; padding: 20px 20px 56px 0; }
+    .p-liste { gap: 40px; }
+    .p-liste img { height: 198px; }
+
+    .parcours { display: grid; grid-template-columns: minmax(0, 1fr) 1px 695px; gap: 50px; align-items: stretch; }
+    .pa-txt { gap: 18px; }
+    .titre { font-size: 44px; }
+    .pa-txt p { font-size: 18px; }
+    .signature { align-self: flex-start; margin: 12px 0 0 100px; width: 260px; }
+    .filet { display: block; background: var(--gold); }
+    .frise { padding: 36px 40px; gap: 36px; }
+    .frise::before { left: 139px; }
+    .frise li { grid-template-columns: 70px 20px minmax(0, 1fr); gap: 20px; }
+    .ico { width: 70px; height: 70px; }
+    .ico svg { width: 30px; height: 30px; }
+    .pt { width: 20px; height: 20px; }
+    .e-txt { gap: 6px; }
+    .annee { font-size: 18px; }
+    .e-titre { font-size: 17px; }
+
+    .videos { padding: 96px 0 40px; }
+    .v-tete p { font-size: 18px; }
+    .v-grille { grid-template-columns: 745px minmax(0, 1fr); grid-template-rows: 208px 208px 208px; gap: 24px; }
+    .t1 { grid-column: 1; grid-row: 1 / 3; }
+    .t1 .lecture { width: 84px; height: 84px; }
+    .t1 .v-titre { font-size: 30px; }
+
+    .insta { padding: 0 0 96px; }
+    .i-wrap { gap: 32px; }
+    .i-bloc { margin-top: 8px; padding: 36px 20px 36px 28px; grid-template-columns: 66px minmax(0, 1fr) 245px; gap: 24px; }
+    .i-txt { gap: 10px; }
+    .i-txt span:last-child { font-size: 16px; }
+    .br-desk { display: inline; }
+    .i-btn { grid-column: auto; height: 44px; }
+    .i-wrap > p { font-size: 18px; }
+  }
+</style>

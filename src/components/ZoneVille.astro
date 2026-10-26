@@ -1,0 +1,31 @@
+---
+// src/components/ZoneVille.astro — présentation locale + communes en étiquettes.
+// Utilisé en haut des pages DJ mariage Lyon / Besançon (texte important pour le SEO local).
+interface Props {
+  eyebrow: string;
+  titre: string;
+  paragraphes: string[];
+  communes: string[];
+}
+const { eyebrow, titre, paragraphes, communes } = Astro.props;
+---
+<section class="section">
+  <div class="container zone">
+    <span class="eyebrow">{eyebrow}</span>
+    <h2 class="titre">{titre}</h2>
+    {paragraphes.map((p) => <p>{p}</p>)}
+    <ul aria-label="Communes et départements desservis">
+      {communes.map((c) => <li>{c}</li>)}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .zone { display: flex; flex-direction: column; gap: 18px; }
+  .titre { font-size: 28px; line-height: 1.15; }
+  p { max-width: 820px; font-size: 16px; line-height: 1.7; color: var(--text); }
+  ul { margin: 6px 0 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: 10px; }
+  li { padding: 8px 16px; border: 1px solid var(--gold); border-radius: 8px; font-size: 14px; }
+  @media (min-width: 768px) { .titre { font-size: 34px; } p { font-size: 17px; } }
+  @media (min-width: 1200px) { .titre { font-size: 40px; } p { font-size: 18px; } }
+</style>

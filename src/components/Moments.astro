@@ -1,0 +1,157 @@
+---
+// src/components/Moments.astro — « Des moments clés de votre mariage » (6 onglets).
+// Les 6 panneaux sont dans la page (bon pour le SEO) ; un petit script
+// affiche celui de l'onglet cliqué. Sans JavaScript, tout reste lisible.
+const moments = [
+  { titre: 'Cérémonie', img: '/images/moment-ceremonie.webp', alt: 'Cérémonie en extérieur, enceintes et micros sur pied devant l’arche',
+    texte: 'Une sonorisation adaptée à votre cérémonie, avec micros pour les discours et la musique des différents temps forts.',
+    option: 'OPTION CÉRÉMONIE LAÏQUE · 180 €', items: ['2 enceintes', '2 micros sans fil'] },
+  { titre: 'Vin d’honneur', img: '/images/moment-vin-honneur.webp', alt: 'Enceinte sur pied à côté du buffet du vin d’honneur',
+    texte: 'Une ambiance musicale élégante et conviviale, avec un volume maîtrisé pour profiter pleinement de la soirée.',
+    option: 'OPTION SONORISATION COCKTAIL · 140 €', items: ['Enceinte sur batterie', 'Installée sur le lieu du vin d’honneur'] },
+  { titre: 'Entrée en salle', img: '/images/moment-entree-salle.webp', alt: 'Salle de réception dressée et illuminée',
+    texte: 'Une musique dynamique et soignée pour créer un moment marquant et lancer la soirée dans la bonne ambiance.',
+    option: 'INCLUS DANS TOUTES LES FORMULES', items: ['6 PAR LED', 'Mise en lumière de la salle'] },
+  { titre: 'Repas', img: '/images/moment-repas.webp', pos: '50% 12%', alt: 'Table de mixage et micros sur pied face aux invités attablés pour le repas',
+    texte: 'Un fond sonore adapté, des micros sans fil pour les interventions et une animation au rythme de votre repas.',
+    option: 'INCLUS DANS TOUTES LES FORMULES', items: ['2 micros sans fil', 'Régie DJ Pioneer RX3'] },
+  { titre: 'Ouverture du bal', img: '/images/moment-ouverture-bal.webp', alt: 'Jets d’étincelles froides de part et d’autre de la piste',
+    texte: 'Une musique ou un mashup personnalisé, accompagné d’effets lumineux et de jets d’étincelles froides.',
+    option: 'OPTION JETS D’ÉTINCELLES · 50 €', items: ['2 jets d’étincelles froides', 'Effet visuel garanti'] },
+  { titre: 'Dancefloor', img: '/images/moment-dancefloor.webp', alt: 'Invités qui dansent bras levés sur la piste',
+    texte: 'Une programmation généraliste définie ensemble, avec un mix dynamique et une adaptation en live.',
+    option: 'INCLUS DANS TOUTES LES FORMULES', items: ['Machine à brouillard', 'Régie lumière Wolfmix'] },
+];
+const num = (i: number) => String(i + 1).padStart(2, '0');
+---
+<section class="section bg-cream moments" aria-labelledby="moments-titre">
+  <div class="container wrap">
+    <div class="tete">
+      <div class="tete-g">
+        <span class="eyebrow">Une journée riche en émotions</span>
+        <h2 id="moments-titre" class="titre">Des moments clés<br />de votre mariage</h2>
+      </div>
+      <p class="intro">De la cérémonie au dancefloor, je vous accompagne tout au long de cette journée avec une programmation adaptée à chaque moment, pour une atmosphère fluide et inoubliable.</p>
+    </div>
+
+    <div class="onglets" role="tablist" aria-label="Moments du mariage">
+      {moments.map((m, i) => (
+        <button class="onglet" type="button" role="tab" id={`tab-${i}`} aria-controls={`panel-${i}`} aria-selected={i === 0 ? 'true' : 'false'} tabindex={i === 0 ? 0 : -1}>
+          <span class="o-num">{num(i)}</span>
+          <span class="o-titre">{m.titre}</span>
+        </button>
+      ))}
+    </div>
+
+    {moments.map((m, i) => (
+      <div class="panneau" role="tabpanel" id={`panel-${i}`} aria-labelledby={`tab-${i}`} hidden={i !== 0}>
+        <img src={m.img} alt={m.alt} loading={i === 0 ? 'eager' : 'lazy'} style={m.pos ? `object-position: ${m.pos}` : undefined} />
+        <div class="p-txt">
+          <span class="grand-num">{num(i)}</span>
+          <h3>{m.titre}</h3>
+          <p>{m.texte}</p>
+          <span class="sep" aria-hidden="true"></span>
+          <span class="option">{m.option}</span>
+          <ul>
+            {m.items.map((it) => (
+              <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#C9944F" stroke-width="2" aria-hidden="true"><path d="m4 12 5 5L20 6"/></svg>{it}</li>
+            ))}
+          </ul>
+          <div class="p-bas">
+            {i < moments.length - 1
+              ? <button class="suivant" type="button" data-suivant={i + 1}>MOMENT SUIVANT <span aria-hidden="true">→</span></button>
+              : <a class="suivant" href="/devis">DEMANDER UN DEVIS <span aria-hidden="true">→</span></a>}
+            <span class="compteur">{num(i)} / {num(moments.length - 1)}</span>
+          </div>
+        </div>
+      </div>
+    ))}
+  </div>
+</section>
+
+<script>
+  // Change d'onglet : affiche le bon panneau, met à jour l'onglet actif.
+  document.querySelectorAll<HTMLElement>('.moments').forEach((section) => {
+    const onglets = [...section.querySelectorAll<HTMLButtonElement>('.onglet')];
+    const panneaux = [...section.querySelectorAll<HTMLElement>('.panneau')];
+    const choisir = (i: number, focus = false) => {
+      onglets.forEach((o, k) => { o.setAttribute('aria-selected', String(k === i)); o.tabIndex = k === i ? 0 : -1; });
+      panneaux.forEach((p, k) => { p.hidden = k !== i; });
+      if (focus) onglets[i].focus();
+    };
+    onglets.forEach((o, i) => {
+      o.addEventListener('click', () => choisir(i));
+      // Flèches gauche / droite au clavier (accessibilité)
+      o.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight') choisir((i + 1) % onglets.length, true);
+        if (e.key === 'ArrowLeft') choisir((i - 1 + onglets.length) % onglets.length, true);
+      });
+    });
+    section.querySelectorAll<HTMLButtonElement>('[data-suivant]').forEach((b) => {
+      b.addEventListener('click', () => choisir(Number(b.dataset.suivant)));
+    });
+  });
+</script>
+
+<style>
+  .wrap { display: flex; flex-direction: column; gap: 28px; }
+  .tete { display: flex; flex-direction: column; gap: 18px; }
+  .tete-g { display: flex; flex-direction: column; gap: 14px; }
+  .eyebrow::before { width: 50px; }
+  .titre { font-size: 36px; line-height: 1.05; }
+  .intro { font-size: 15px; line-height: 1.7; color: var(--text); }
+
+  /* Onglets */
+  .onglets { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: 12px; row-gap: 4px; border-top: 1px solid var(--line); }
+  .onglet { min-height: 44px; margin-top: -1px; padding: 14px 8px 10px 0; border: 0; border-top: 2px solid transparent; background: transparent; cursor: pointer; text-align: left; display: flex; flex-direction: column; gap: 8px; font-family: inherit; }
+  .onglet[aria-selected='true'] { border-top-color: #c9944f; }
+  .o-num { font-size: 11px; letter-spacing: 1px; color: var(--muted); }
+  .o-titre { font-family: var(--serif); font-size: 18px; line-height: 1.15; color: #8a8a8a; }
+  .onglet[aria-selected='true'] .o-titre, .onglet:hover .o-titre { color: var(--ink); }
+
+  /* Panneau */
+  .panneau { display: flex; flex-direction: column; gap: 24px; }
+  .panneau[hidden] { display: none; }
+  .panneau img { width: 100%; height: 240px; object-fit: cover; border-radius: 8px; background: #f2ede7; }
+  .p-txt { display: flex; flex-direction: column; gap: 18px; }
+  .grand-num { font-family: var(--serif); font-size: 46px; line-height: 1; color: var(--gold-text); }
+  .p-txt h3 { font-size: 28px; }
+  .p-txt p { font-size: 15px; line-height: 1.7; color: var(--text); }
+  .sep { height: 1px; background: var(--line); margin: 8px 0; }
+  .option { font-size: 11px; letter-spacing: 1.5px; color: var(--muted); }
+  ul { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 12px; font-size: 15px; }
+  li { display: flex; align-items: center; gap: 14px; }
+  .p-bas { margin-top: 14px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+  .suivant { min-height: 44px; padding: 0 0 2px; border: 0; border-bottom: 1px solid #c9944f; background: transparent; display: flex; align-items: center; gap: 12px; font-family: var(--sans); font-size: 13px; font-weight: 500; letter-spacing: 1.5px; color: var(--gold-text); text-decoration: none; cursor: pointer; }
+  .suivant:hover { color: var(--ink); border-color: var(--ink); }
+  .compteur { font-size: 13px; color: var(--muted); }
+
+  /* Tablette */
+  @media (min-width: 768px) {
+    .wrap { gap: 40px; }
+    .eyebrow { font-size: 24px; }
+    .titre { font-size: 46px; }
+    .intro { font-size: 16px; }
+    .onglets { column-gap: 0; row-gap: 8px; }
+    .onglet { padding: 22px 16px 8px 0; border-top-width: 1px; }
+    .o-titre { font-size: 22px; }
+    .panneau { gap: 32px; }
+    .panneau img { height: 380px; }
+    .grand-num { font-size: 56px; }
+    .p-txt h3 { font-size: 32px; }
+    .p-txt p { font-size: 16px; }
+  }
+
+  /* Ordinateur */
+  @media (min-width: 1200px) {
+    .tete { display: grid; grid-template-columns: minmax(0, 1fr) 430px; gap: 80px; align-items: end; }
+    .eyebrow { font-size: 26px; }
+    .titre { font-size: 56px; }
+    .onglets { grid-template-columns: repeat(6, minmax(0, 1fr)); row-gap: 0; }
+    .o-titre { font-size: 24px; }
+    .panneau { display: grid; grid-template-columns: 600px minmax(0, 1fr); gap: 64px; align-items: center; }
+    .panneau img { height: 450px; }
+    .grand-num { font-size: 64px; }
+    .p-txt h3 { font-size: 34px; }
+  }
+</style>

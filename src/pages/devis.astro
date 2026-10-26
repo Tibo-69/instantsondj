@@ -1,0 +1,366 @@
+---
+// src/pages/devis.astro — page Demande de devis (adresse : /devis)
+// Le formulaire est géré par Netlify Forms (gratuit) : chaque demande arrive
+// dans l'onglet « Forms » du site sur Netlify, et peut être envoyée par e-mail à Tibo.
+// Les attributs importants : name="devis", data-netlify="true" et le champ caché form-name.
+import Layout from '../layouts/Layout.astro';
+import { site } from '../data/site';
+
+const atouts = [
+  { titre: 'Réponse sous 24h', texte: 'Un échange rapide et personnalisé', ico: '<path d="M21 11.5c0 4.4-4 8-9 8-1.3 0-2.6-.2-3.7-.7L3.5 20.5l1.3-3.8C3.7 15.3 3 13.5 3 11.5c0-4.4 4-8 9-8s9 3.6 9 8z"/><path d="M8 11.5h.01M12 11.5h.01M16 11.5h.01"/>' },
+  { titre: 'Des conseils sur-mesure', texte: 'Selon vos envies et votre budget', ico: '<path d="M3 14v-2a9 9 0 0 1 18 0v2"/><path d="M21 15a2 2 0 0 1-2 2h-1v-6h1a2 2 0 0 1 2 2zM3 15a2 2 0 0 0 2 2h1v-6H5a2 2 0 0 0-2 2z"/>' },
+  { titre: 'Une prestation adaptée', texte: 'Pour un événement qui vous ressemble', ico: '<path d="M13 3 5 13.5h6L10 21l8-10.5h-6z"/>' },
+];
+const types = ['Mariage', 'Anniversaire', 'Événement d’entreprise', 'Soirée privée'];
+const formules = ['Pack Party', 'Pack Élégance', 'Pack Prestige', 'Je ne sais pas encore'];
+const fleche = '<svg class="fleche" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#111111" stroke-width="1.6" aria-hidden="true"><path d="m5 9 7 7 7-7"/></svg>';
+---
+<Layout
+  title="Demande de devis DJ | DJ Tiako"
+  description="Demandez votre devis DJ à Lyon : réponse sous 24 h, conseils sur mesure selon vos envies et votre budget."
+  page="devis"
+>
+  <!-- ===== Haut de page ===== -->
+  <section class="hero">
+    <div class="container h-wrap">
+      <span class="h-eyebrow"><i aria-hidden="true"></i>Demande de devis</span>
+      <h1>Parlons de votre <span class="or">événement</span></h1>
+      <p class="h-sous">Envoyez-moi un message et obtenez des réponses à toutes vos questions.<br class="br-desk" /> Je suis à votre écoute.</p>
+      <ul class="atouts">
+        {atouts.map((a) => (
+          <li>
+            <span class="rond"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" set:html={a.ico} /></span>
+            <span class="a-txt">{a.titre}<small>{a.texte}</small></span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="corps">
+    <div class="container c-grille">
+      <!-- ===== Coordonnées ===== -->
+      <div class="contact">
+        <span class="eyebrow">Une prestation qui vous ressemble</span>
+        <h2 class="titre">Chaque événement est <span class="or-txt">unique</span></h2>
+        <p>Que ce soit pour un mariage, un anniversaire, un événement d’entreprise ou une soirée privée, racontez-moi votre projet et je vous proposerai la formule la plus adaptée à vos envies.</p>
+        <div class="coord">
+          <a class="tel" href={site.telLien}>
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg>
+            <span>{site.telAffiche}</span>
+          </a>
+          <div class="autres">
+            <a class="ligne" href={`mailto:${site.email}`}><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M21 12v6a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h11"/><path d="m3 6 9 6 5-3.3"/><circle cx="20" cy="5" r="2" fill="currentColor"/></svg>{site.email}</a>
+            <span class="ligne"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21.5s7-7.3 7-12.5a7 7 0 0 0-14 0c0 5.2 7 12.5 7 12.5z"/><circle cx="12" cy="9" r="2.5"/></svg>Villeurbanne 69100</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== Formulaire (Netlify Forms) ===== -->
+      <div class="zone-form">
+        <form class="formulaire" name="devis" method="POST" action="/merci" data-netlify="true" netlify-honeypot="bot-field" novalidate data-form>
+          <input type="hidden" name="form-name" value="devis" />
+          <!-- piège à robots : invisible pour les humains -->
+          <p class="cache"><label>Ne pas remplir : <input name="bot-field" tabindex="-1" autocomplete="off" /></label></p>
+
+          <div class="f-tete">
+            <span class="eyebrow">Votre demande de devis</span>
+            <h2 class="titre">Dites-m’en plus sur votre projet</h2>
+            <p>Remplissez ce formulaire et je reviendrai vers vous rapidement.</p>
+          </div>
+
+          <div class="champs">
+            <label class="champ">
+              <span class="lbl">Nom et prénom<b aria-hidden="true">*</b></span>
+              <input class="field" type="text" name="nom" autocomplete="name" placeholder="Votre nom et prénom" required data-err="Merci d’indiquer votre nom et prénom." aria-describedby="err-nom" />
+              <span class="err" id="err-nom" role="alert" hidden></span>
+            </label>
+            <label class="champ">
+              <span class="lbl">Téléphone<b aria-hidden="true">*</b></span>
+              <input class="field" type="tel" name="telephone" autocomplete="tel" placeholder="06 XX XX XX XX" required data-err="Merci d’indiquer votre numéro de téléphone." aria-describedby="err-tel" />
+              <span class="err" id="err-tel" role="alert" hidden></span>
+            </label>
+            <label class="champ">
+              <span class="lbl">E-mail<b aria-hidden="true">*</b></span>
+              <input class="field" type="email" name="email" autocomplete="email" placeholder="votre@email.fr" required data-err="Merci d’indiquer votre adresse e-mail." aria-describedby="err-email" />
+              <span class="err" id="err-email" role="alert" hidden></span>
+            </label>
+            <label class="champ">
+              <span class="lbl">Type d’événement<b aria-hidden="true">*</b></span>
+              <span class="select">
+                <select class="field" name="type" required data-err="Merci de choisir un type d’événement." aria-describedby="err-type">
+                  <option value="">Choisir</option>
+                  {types.map((t) => <option>{t}</option>)}
+                </select>
+                <Fragment set:html={fleche} />
+              </span>
+              <span class="err" id="err-type" role="alert" hidden></span>
+            </label>
+            <label class="champ">
+              <span class="lbl">Date de l’événement<b aria-hidden="true">*</b></span>
+              <input class="field" type="date" name="date" required data-err="Merci d’indiquer la date de votre événement." aria-describedby="err-date" />
+              <span class="err" id="err-date" role="alert" hidden></span>
+            </label>
+            <label class="champ">
+              <span class="lbl">Formule souhaitée<b aria-hidden="true">*</b></span>
+              <span class="select">
+                <select class="field" name="formule" required data-err="Merci de choisir une formule." aria-describedby="err-formule">
+                  <option value="">Choisir</option>
+                  {formules.map((f) => <option>{f}</option>)}
+                </select>
+                <Fragment set:html={fleche} />
+              </span>
+              <span class="err" id="err-formule" role="alert" hidden></span>
+            </label>
+            <label class="champ large">
+              <span class="lbl">Lieu / ville de réception</span>
+              <input class="field" type="text" name="lieu" placeholder="Ex. : Lyon, domaine, salle des fêtes…" />
+            </label>
+            <label class="champ large">
+              <span class="lbl">Parlez-moi de votre projet<b aria-hidden="true">*</b></span>
+              <textarea class="field" name="projet" required data-err="Dites-m’en un peu plus sur votre projet." aria-describedby="err-projet" placeholder="Parlez-moi de votre événement, de l’ambiance souhaitée, de vos envies musicales ou de toute information utile à votre projet."></textarea>
+              <span class="err" id="err-projet" role="alert" hidden></span>
+            </label>
+          </div>
+
+          <label class="accord">
+            <input type="checkbox" name="accord" value="oui" required data-err="Merci d’accepter l’utilisation de vos données pour recevoir votre devis." aria-describedby="err-accord" />
+            <span>J’accepte que mes données soient utilisées pour traiter ma demande de devis, conformément à la <a href="/confidentialite">politique de confidentialité</a>.</span>
+          </label>
+          <span class="err" id="err-accord" role="alert" hidden></span>
+          <span class="obligatoire">* Champs obligatoires</span>
+
+          <div class="resume" role="alert" hidden data-resume>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5h.01"/></svg>
+            <span data-resume-txt></span>
+          </div>
+
+          <button class="btn btn-dark envoyer" type="submit" data-envoyer>
+            <svg class="spin" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-6.2-8.56"/></svg>
+            <span data-label>DEMANDER UN DEVIS</span>
+          </button>
+        </form>
+
+        <!-- Message affiché après l'envoi (sans recharger la page) -->
+        <div class="envoye" role="status" hidden data-envoye>
+          <span class="ok"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m4 12 5 5L20 6"/></svg></span>
+          <h2>Votre demande de devis a bien été envoyée</h2>
+          <p>Merci pour votre demande. Je reviendrai vers vous dans les meilleurs délais afin d’échanger autour de votre événement et de votre projet musical.</p>
+          <p>À très bientôt&nbsp;!</p>
+          <a class="retour" href="/">RETOUR AU SITE <span aria-hidden="true">→</span></a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<script>
+  // Vérifie les champs, affiche les erreurs en français, puis envoie à Netlify
+  // sans quitter la page. Si le JavaScript est désactivé, le formulaire
+  // s'envoie quand même normalement et mène à la page /merci.
+  const form = document.querySelector<HTMLFormElement>('[data-form]');
+  const envoye = document.querySelector<HTMLElement>('[data-envoye]');
+  if (form && envoye) {
+    const champs = [...form.querySelectorAll<HTMLInputElement>('[data-err]')];
+    const resume = form.querySelector<HTMLElement>('[data-resume]')!;
+    const resumeTxt = form.querySelector<HTMLElement>('[data-resume-txt]')!;
+    const bouton = form.querySelector<HTMLButtonElement>('[data-envoyer]')!;
+    const label = form.querySelector<HTMLElement>('[data-label]')!;
+    let essaye = false;
+
+    const erreurDe = (c: HTMLInputElement): string => {
+      const v = c.type === 'checkbox' ? (c.checked ? 'ok' : '') : c.value.trim();
+      if (!v) return c.dataset.err || 'Champ obligatoire.';
+      if (c.type === 'tel' && v.replace(/\D/g, '').length < 10) return 'Ce numéro semble incomplet (10 chiffres attendus).';
+      if (c.type === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v)) return 'Adresse e-mail invalide (exemple : nom@email.fr).';
+      return '';
+    };
+    const afficher = (c: HTMLInputElement) => {
+      const msg = essaye ? erreurDe(c) : '';
+      const zone = document.getElementById(c.getAttribute('aria-describedby') || '');
+      c.setAttribute('aria-invalid', msg ? 'true' : 'false');
+      c.classList.toggle('invalide', !!msg);
+      if (zone) { zone.hidden = !msg; zone.innerHTML = msg ? `${'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5h.01"/></svg>'}<span>${msg}</span>` : ''; }
+      return !!msg;
+    };
+    const toutVerifier = () => {
+      const n = champs.filter((c) => afficher(c)).length;
+      resume.hidden = n === 0;
+      resumeTxt.textContent = (n === 1 ? '1 champ est à compléter' : `${n} champs sont à compléter`) + ' — merci de vérifier les champs en rouge.';
+      return n;
+    };
+    // les listes déroulantes passent en noir quand on a choisi
+    form.querySelectorAll('select').forEach((s) => s.addEventListener('change', () => s.classList.toggle('choisi', !!s.value)));
+    champs.forEach((c) => c.addEventListener(c.type === 'checkbox' || c.tagName === 'SELECT' ? 'change' : 'input', () => { if (essaye) toutVerifier(); }));
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      essaye = true;
+      const n = toutVerifier();
+      if (n > 0) { champs.find((c) => c.getAttribute('aria-invalid') === 'true')?.focus(); return; }
+      bouton.disabled = true; bouton.classList.add('envoi'); label.textContent = 'ENVOI EN COURS…';
+      try {
+        const data = new URLSearchParams(new FormData(form) as any).toString();
+        const rep = await fetch('/', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: data });
+        if (!rep.ok) throw new Error(String(rep.status));
+        form.hidden = true; envoye.hidden = false;
+        envoye.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      } catch {
+        resume.hidden = false;
+        resumeTxt.textContent = 'L’envoi n’a pas fonctionné. Réessayez, ou appelez-moi directement au 06 19 84 59 26.';
+      } finally {
+        bouton.disabled = false; bouton.classList.remove('envoi'); label.textContent = 'DEMANDER UN DEVIS';
+      }
+    });
+  }
+</script>
+
+<style>
+  .or { color: var(--gold); }
+  .or-txt { color: var(--gold-text); }
+  .br-desk { display: none; }
+
+  /* ===== Haut de page ===== */
+  .hero {
+    color: #fff;
+    background: linear-gradient(180deg, rgba(20,15,10,.68) 0%, rgba(20,15,10,.88) 100%), url('/images/devis-hero.webp') 15% center / cover no-repeat, #140f0a;
+  }
+  .h-wrap { padding-top: 40px; padding-bottom: 32px; display: flex; flex-direction: column; gap: 14px; }
+  .h-eyebrow { display: flex; align-items: center; gap: 12px; font-family: var(--serif); font-size: 22px; color: var(--gold); }
+  .h-eyebrow i { width: 32px; height: 1px; background: var(--gold); }
+  h1 { font-size: 38px; line-height: 1.1; }
+  .h-sous { font-family: var(--serif); font-size: 22px; line-height: 1.25; }
+  .atouts { margin: 10px 0 0; padding: 0; list-style: none; display: flex; flex-direction: column; }
+  .atouts li { display: flex; align-items: center; gap: 14px; padding: 14px 0; border-bottom: 1px solid rgba(219,167,100,.5); }
+  .atouts li:last-child { padding-bottom: 0; border-bottom: 0; }
+  .rond { width: 42px; height: 42px; flex-shrink: 0; border: 1px solid var(--gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+  .a-txt { display: flex; flex-direction: column; font-size: 16px; line-height: 1.35; }
+  .a-txt small { font-size: 14px; color: rgba(255,255,255,.85); }
+
+  /* ===== Corps : mobile = formulaire d'abord, coordonnées ensuite ===== */
+  .c-grille { display: flex; flex-direction: column; padding: 0; }
+  .zone-form { order: -1; }
+  .contact { padding: 48px var(--gutter) 56px; display: flex; flex-direction: column; gap: 16px; }
+  .titre { font-size: 30px; line-height: 1.15; }
+  .contact p { font-size: 16px; line-height: 1.6; }
+  .coord { display: flex; flex-direction: column; gap: 16px; }
+  .tel { margin-top: 4px; height: 68px; padding: 0 24px; border-radius: 8px; background: var(--cream); display: flex; align-items: center; gap: 16px; text-decoration: none; color: var(--ink); }
+  .tel span { font-family: var(--serif); font-size: 26px; }
+  .autres { display: flex; flex-direction: column; gap: 14px; }
+  .ligne { min-height: 44px; display: flex; align-items: center; gap: 16px; text-decoration: none; color: var(--ink); font-size: 16px; }
+
+  /* Formulaire */
+  .formulaire { background: var(--cream); padding: 32px var(--gutter) 40px; display: flex; flex-direction: column; gap: 20px; }
+  .cache { position: absolute; left: -9999px; }
+  .f-tete { display: flex; flex-direction: column; gap: 8px; }
+  .f-tete .titre { font-size: 28px; }
+  .f-tete p { font-size: 15px; line-height: 1.5; }
+  .champs { display: flex; flex-direction: column; gap: 20px; }
+  .champ { display: flex; flex-direction: column; gap: 8px; font-size: 14px; }
+  .lbl { display: flex; align-items: baseline; gap: 4px; }
+  .lbl b { font-weight: 400; color: var(--gold-text); }
+  .field { height: 48px; width: 100%; padding: 0 15px; border: 1px solid var(--line); background: #fff; font-family: var(--sans); font-size: 16px; color: var(--ink); border-radius: 0; }
+  .field::placeholder { color: #8a8a8a; }
+  .field, .accord input { scroll-margin-top: 140px; } /* le champ en erreur ne passe pas sous le menu */
+  .field:focus { outline: 2px solid var(--gold); outline-offset: -1px; }
+  textarea.field { height: 146px; padding: 14px 15px; resize: vertical; line-height: 1.5; }
+  .select { position: relative; display: block; }
+  .select select { appearance: none; -webkit-appearance: none; color: #8a8a8a; padding-right: 44px; }
+  .select select.choisi { color: var(--ink); }
+  .select :global(.fleche) { position: absolute; right: 12px; top: 12px; pointer-events: none; }
+  .field.invalide { border-color: #b3261e; background: #fffbfa; }
+  .err { display: flex; align-items: flex-start; gap: 6px; font-size: 13px; line-height: 1.4; color: #b3261e; }
+  .err[hidden] { display: none; }
+  .err :global(svg) { flex-shrink: 0; margin-top: 1px; }
+  .accord { display: flex; align-items: flex-start; gap: 12px; font-size: 13px; line-height: 1.5; color: var(--text); cursor: pointer; }
+  .accord input { width: 18px; height: 18px; margin: 1px 0 0; flex-shrink: 0; accent-color: var(--ink); }
+  .accord a { color: var(--ink); }
+  .obligatoire { font-size: 12px; color: var(--muted); }
+  .resume { display: flex; align-items: flex-start; gap: 12px; padding: 14px 16px; background: #fbedeb; border: 1px solid #e8b8b2; font-size: 14px; line-height: 1.5; color: #8c1d18; }
+  .resume[hidden] { display: none; }
+  .resume svg { flex-shrink: 0; }
+  .envoyer { align-self: stretch; height: 48px; letter-spacing: .5px; }
+  .envoyer .spin { display: none; animation: tourne .8s linear infinite; }
+  .envoyer.envoi .spin { display: block; }
+  .envoyer:disabled { opacity: .8; cursor: wait; }
+  @keyframes tourne { to { transform: rotate(360deg); } }
+
+  /* Message envoyé */
+  .envoye { background: #eef3ea; padding: 48px 24px; display: flex; flex-direction: column; align-items: center; gap: 16px; text-align: center; }
+  .envoye[hidden] { display: none; }
+  .ok { width: 56px; height: 56px; border-radius: 50%; border: 1px solid #5e7b52; display: flex; align-items: center; justify-content: center; color: #5e7b52; }
+  .envoye h2 { font-size: 28px; }
+  .envoye p { max-width: 520px; font-size: 16px; line-height: 1.6; }
+  .retour { margin-top: 8px; min-height: 44px; display: flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 500; color: var(--ink); }
+
+  /* ===== Tablette ===== */
+  @media (min-width: 768px) {
+    .hero { background: linear-gradient(90deg, rgba(20,15,10,.82) 0%, rgba(20,15,10,.58) 55%, rgba(20,15,10,.35) 100%), url('/images/devis-hero.webp') 20% center / cover no-repeat, #140f0a; }
+    .h-wrap { padding-top: 48px; padding-bottom: 40px; }
+    .h-eyebrow { font-size: 26px; }
+    .h-eyebrow i { width: 48px; }
+    h1 { font-size: 46px; }
+    .h-sous { font-size: 26px; }
+    .atouts { margin-top: 16px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .atouts li { flex-direction: column; align-items: flex-start; gap: 10px; padding: 0 16px; border-bottom: 0; border-right: 1px solid var(--gold); }
+    .atouts li:first-child { padding-left: 0; }
+    .atouts li:last-child { border-right: 0; }
+    .rond { width: 46px; height: 46px; }
+    .a-txt { font-size: 17px; }
+
+    .c-grille { padding: 72px var(--gutter); gap: 48px; }
+    .zone-form { order: 0; }
+    .contact { padding: 0; gap: 18px; }
+    .titre { font-size: 34px; }
+    .contact p { font-size: 17px; }
+    .coord { margin-top: 6px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; align-items: center; }
+    .tel { margin: 0; height: 72px; padding: 0 28px; gap: 18px; }
+    .tel span { font-size: 28px; }
+    .ligne { min-height: 0; font-size: 17px; }
+
+    .formulaire { padding: 32px 28px 28px; gap: 22px; }
+    .f-tete .titre { font-size: 32px; }
+    .f-tete p { font-size: 16px; }
+    .champs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px 18px; }
+    .champ { gap: 10px; }
+    .champ.large { grid-column: 1 / -1; }
+    .field { font-size: 14px; }
+    .envoyer { align-self: center; padding: 0 30px; }
+  }
+
+  /* ===== Ordinateur : coordonnées à gauche, formulaire à droite ===== */
+  @media (min-width: 1200px) {
+    .hero { background: linear-gradient(90deg, rgba(20,15,10,.8) 0%, rgba(20,15,10,.55) 50%, rgba(20,15,10,.3) 100%), url('/images/devis-hero.webp') center / cover no-repeat, #140f0a; }
+    .h-wrap { padding-top: 20px; padding-bottom: 24px; gap: 12px; }
+    .h-eyebrow { gap: 14px; font-size: 34px; }
+    .h-eyebrow i { width: 66px; }
+    h1 { font-size: 58px; }
+    .h-sous { font-size: 34px; line-height: 1.2; }
+    .br-desk { display: inline; }
+    .atouts { margin-top: 8px; display: flex; flex-direction: row; }
+    .atouts li { flex-direction: row; align-items: center; gap: 14px; padding: 0 50px 0 14px; }
+    .atouts li:first-child { padding: 0 14px 0 0; }
+    .atouts li:last-child { padding: 0 0 0 14px; }
+    .rond { width: 54px; height: 54px; }
+    .a-txt { font-size: 20px; }
+    .a-txt small { font-size: 18px; color: #fff; }
+
+    .c-grille { display: grid; grid-template-columns: 460px minmax(0, 1fr); gap: 48px; align-items: start; padding-top: 30px; padding-bottom: 30px; padding-left: 90px; }
+    .contact { padding-top: 24px; gap: 20px; }
+    .contact .titre { margin-top: -8px; }
+    .contact p { margin-top: 10px; font-size: 18px; }
+    .coord { margin-top: 6px; display: flex; flex-direction: column; gap: 20px; }
+    .tel { height: 78px; padding: 0 48px; gap: 22px; }
+    .tel span { font-size: 30px; }
+    .autres { gap: 20px; }
+    .ligne { gap: 20px; font-size: 18px; }
+
+    .formulaire { padding: 30px 20px 20px; gap: 20px; }
+    .f-tete .titre { font-size: 34px; }
+    .f-tete p { font-size: 18px; }
+    .champs { gap: 24px 20px; }
+    .envoyer { height: 46px; }
+    .envoye { padding: 48px 32px; }
+    .envoye h2 { font-size: 30px; }
+  }
+</style>
