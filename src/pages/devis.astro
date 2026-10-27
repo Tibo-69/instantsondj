@@ -13,6 +13,11 @@ const atouts = [
 ];
 const types = ['Mariage', 'Anniversaire', 'Événement d’entreprise', 'Soirée privée'];
 const formules = ['Pack Party', 'Pack Élégance', 'Pack Prestige', 'Je ne sais pas encore'];
+const packs = [
+  { nom: 'Pack Party', pub: 'Jusqu’à 60 personnes', prix: '1 100 €' },
+  { nom: 'Pack Élégance', pub: 'Jusqu’à 150 personnes', prix: '1 300 €' },
+  { nom: 'Pack Prestige', pub: 'Jusqu’à 150 personnes · étincelles incluses', prix: '1 450 €' },
+];
 const fleche = '<svg class="fleche" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#111111" stroke-width="1.6" aria-hidden="true"><path d="m5 9 7 7 7-7"/></svg>';
 ---
 <Layout
@@ -54,6 +59,23 @@ const fleche = '<svg class="fleche" width="24" height="24" viewBox="0 0 24 24" f
             <span class="ligne"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21.5s7-7.3 7-12.5a7 7 0 0 0-14 0c0 5.2 7 12.5 7 12.5z"/><circle cx="12" cy="9" r="2.5"/></svg>Villeurbanne 69100</span>
           </div>
         </div>
+
+        <!-- Rappel des formules : un clic pré-remplit le champ « Formule souhaitée » -->
+        <div class="tarifs">
+          <span class="t-titre">Les formules</span>
+          <ul>
+            {packs.map((pk) => (
+              <li>
+                <button type="button" class="t-ligne" data-formule={pk.nom}>
+                  <span class="t-nom">{pk.nom}<small>{pk.pub}</small></span>
+                  <span class="t-prix">{pk.prix}</span>
+                </button>
+              </li>
+            ))}
+          </ul>
+          <span class="t-note">Prix tout compris · TVA non applicable</span>
+          <a class="t-lien" href="/tarifs">Voir le détail des formules <span aria-hidden="true">→</span></a>
+        </div>
       </div>
 
       <!-- ===== Formulaire (Netlify Forms) ===== -->
@@ -67,6 +89,16 @@ const fleche = '<svg class="fleche" width="24" height="24" viewBox="0 0 24 24" f
             <span class="eyebrow">Votre demande de devis</span>
             <h2 class="titre">Dites-m’en plus sur votre projet</h2>
             <p>Remplissez ce formulaire et je reviendrai vers vous rapidement.</p>
+            <!-- Mobile : rappel des prix en haut du formulaire (le bloc complet est plus bas) -->
+            <div class="mini-tarifs" aria-label="Les formules">
+              {packs.map((pk) => (
+                <button type="button" class="mini" data-formule={pk.nom}>
+                  <span>{pk.nom.replace('Pack ', '')}</span>
+                  <b>{pk.prix}</b>
+                </button>
+              ))}
+            </div>
+            <a class="mini-lien" href="/tarifs">Voir le détail des formules <span aria-hidden="true">→</span></a>
           </div>
 
           <div class="champs">
@@ -106,7 +138,7 @@ const fleche = '<svg class="fleche" width="24" height="24" viewBox="0 0 24 24" f
               <span class="select">
                 <select class="field" name="formule" required data-err="Merci de choisir une formule." aria-describedby="err-formule">
                   <option value="">Choisir</option>
-                  {formules.map((f) => <option>{f}</option>)}
+                  {formules.map((f) => { const pk = packs.find((x) => x.nom === f); return <option value={f}>{pk ? `${f} — ${pk.prix}` : f}</option>; })}
                 </select>
                 <Fragment set:html={fleche} />
               </span>
@@ -191,7 +223,20 @@ const fleche = '<svg class="fleche" width="24" height="24" viewBox="0 0 24 24" f
     };
     // les listes déroulantes passent en noir quand on a choisi
     form.querySelectorAll('select').forEach((s) => s.addEventListener('change', () => s.classList.toggle('choisi', !!s.value)));
+    const selFormule = form.querySelector<HTMLSelectElement>('select[name="formule"]')!;
+    const majMini = () => document.querySelectorAll<HTMLElement>('.mini').forEach((m) => m.classList.toggle('actif', m.dataset.formule === selFormule.value));
+    selFormule.addEventListener('change', majMini);
     champs.forEach((c) => c.addEventListener(c.type === 'checkbox' || c.tagName === 'SELECT' ? 'change' : 'input', () => { if (essaye) toutVerifier(); }));
+
+    // Clic sur une formule (colonne de gauche) : remplit le champ et y emmène le visiteur
+    document.querySelectorAll<HTMLButtonElement>('[data-formule]').forEach((btn) => btn.addEventListener('click', () => {
+      const sel = form.querySelector<HTMLSelectElement>('select[name="formule"]')!;
+      sel.value = btn.dataset.formule || '';
+      sel.classList.add('choisi');
+      sel.dispatchEvent(new Event('change'));
+      sel.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      sel.focus({ preventScroll: true });
+    }));
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -223,7 +268,7 @@ const fleche = '<svg class="fleche" width="24" height="24" viewBox="0 0 24 24" f
   /* ===== Haut de page ===== */
   .hero {
     color: #fff;
-    background: linear-gradient(180deg, rgba(20,15,10,.68) 0%, rgba(20,15,10,.88) 100%), url('/images/devis-hero.webp') 15% center / cover no-repeat, #140f0a;
+    background: linear-gradient(180deg, rgba(20,15,10,.78) 0%, rgba(20,15,10,.92) 100%), url('/images/devis-hero.webp') 15% center / cover no-repeat, #140f0a;
   }
   .h-wrap { padding-top: 40px; padding-bottom: 32px; display: flex; flex-direction: column; gap: 14px; }
   .h-eyebrow { display: flex; align-items: center; gap: 12px; font-family: var(--serif); font-size: 22px; color: var(--gold); }
@@ -246,8 +291,33 @@ const fleche = '<svg class="fleche" width="24" height="24" viewBox="0 0 24 24" f
   .coord { display: flex; flex-direction: column; gap: 16px; }
   .tel { margin-top: 4px; height: 68px; padding: 0 24px; border-radius: 8px; background: var(--cream); display: flex; align-items: center; gap: 16px; text-decoration: none; color: var(--ink); }
   .tel span { font-family: var(--serif); font-size: 26px; }
-  .autres { display: flex; flex-direction: column; gap: 14px; }
+  .autres { display: flex; flex-direction: column; gap: 6px; }
   .ligne { min-height: 44px; display: flex; align-items: center; gap: 16px; text-decoration: none; color: var(--ink); font-size: 16px; }
+
+
+  /* Bloc « Les formules » */
+  .tarifs { margin-top: 12px; padding: 24px 20px; border: 1px solid var(--card-line); border-radius: 12px; background: #fff; display: flex; flex-direction: column; gap: 12px; }
+  .t-titre { font-family: var(--serif); font-size: 24px; }
+  .tarifs ul { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; }
+  .t-ligne { width: 100%; min-height: 56px; padding: 12px 0; border: 0; border-bottom: 1px solid var(--line); background: transparent; display: flex; align-items: center; justify-content: space-between; gap: 16px; text-align: left; font-family: inherit; color: var(--ink); cursor: pointer; }
+  .tarifs li:last-child .t-ligne { border-bottom: 0; }
+  .t-nom { display: flex; flex-direction: column; gap: 2px; font-size: 16px; }
+  .t-nom small { font-size: 13px; color: var(--muted); }
+  .t-prix { flex-shrink: 0; font-family: var(--serif); font-size: 26px; color: var(--gold-text); }
+  .t-ligne:hover .t-nom { color: var(--gold-text); }
+  .t-note { font-size: 12px; color: var(--muted); }
+  .t-lien { align-self: flex-start; min-height: 44px; display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 500; color: var(--ink); text-underline-offset: 3px; }
+
+
+  /* Mini-tarifs (mobile / tablette) : 3 cases cliquables */
+  .mini-tarifs { margin-top: 8px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+  .mini { min-height: 64px; padding: 10px 6px; border: 1px solid var(--card-line); border-radius: 8px; background: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; font-family: inherit; font-size: 13px; color: var(--ink); cursor: pointer; }
+  .mini b { font-family: var(--serif); font-weight: 400; font-size: 20px; color: var(--gold-text); }
+  .mini.actif { border-color: var(--gold); box-shadow: 0 0 0 1px var(--gold); }
+  .mini-lien { align-self: flex-start; min-height: 40px; display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--ink); text-underline-offset: 3px; }
+  /* mobile : mini-cases en haut du formulaire ; tablette / ordinateur : le bloc complet (déjà au-dessus ou à côté) */
+  .tarifs { display: none; }
+  @media (min-width: 768px) { .mini-tarifs, .mini-lien { display: none; } .tarifs { display: flex; } }
 
   /* Formulaire */
   .formulaire { background: var(--cream); padding: 32px var(--gutter) 40px; display: flex; flex-direction: column; gap: 20px; }
@@ -295,7 +365,7 @@ const fleche = '<svg class="fleche" width="24" height="24" viewBox="0 0 24 24" f
 
   /* ===== Tablette ===== */
   @media (min-width: 768px) {
-    .hero { background: linear-gradient(90deg, rgba(20,15,10,.82) 0%, rgba(20,15,10,.58) 55%, rgba(20,15,10,.35) 100%), url('/images/devis-hero.webp') 20% center / cover no-repeat, #140f0a; }
+    .hero { background: linear-gradient(90deg, rgba(20,15,10,.88) 0%, rgba(20,15,10,.7) 55%, rgba(20,15,10,.5) 100%), url('/images/devis-hero.webp') 20% center / cover no-repeat, #140f0a; }
     .h-wrap { padding-top: 48px; padding-bottom: 40px; }
     .h-eyebrow { font-size: 26px; }
     .h-eyebrow i { width: 48px; }
@@ -330,7 +400,7 @@ const fleche = '<svg class="fleche" width="24" height="24" viewBox="0 0 24 24" f
 
   /* ===== Ordinateur : coordonnées à gauche, formulaire à droite ===== */
   @media (min-width: 1200px) {
-    .hero { background: linear-gradient(90deg, rgba(20,15,10,.8) 0%, rgba(20,15,10,.55) 50%, rgba(20,15,10,.3) 100%), url('/images/devis-hero.webp') center / cover no-repeat, #140f0a; }
+    .hero { background: linear-gradient(90deg, rgba(20,15,10,.88) 0%, rgba(20,15,10,.7) 50%, rgba(20,15,10,.5) 100%), url('/images/devis-hero.webp') center / cover no-repeat, #140f0a; }
     .h-wrap { padding-top: 20px; padding-bottom: 24px; gap: 12px; }
     .h-eyebrow { gap: 14px; font-size: 34px; }
     .h-eyebrow i { width: 66px; }
@@ -345,14 +415,16 @@ const fleche = '<svg class="fleche" width="24" height="24" viewBox="0 0 24 24" f
     .a-txt { font-size: 20px; }
     .a-txt small { font-size: 18px; color: #fff; }
 
-    .c-grille { display: grid; grid-template-columns: 460px minmax(0, 1fr); gap: 48px; align-items: start; padding-top: 30px; padding-bottom: 30px; padding-left: 90px; }
+    .c-grille { display: grid; grid-template-columns: 460px minmax(0, 1fr); gap: 48px; align-items: stretch; padding-top: 30px; padding-bottom: 30px; padding-left: 90px; }
     .contact { padding-top: 24px; gap: 20px; }
     .contact .titre { margin-top: -8px; }
     .contact p { margin-top: 10px; font-size: 18px; }
-    .coord { margin-top: 6px; display: flex; flex-direction: column; gap: 20px; }
-    .tel { height: 78px; padding: 0 48px; gap: 22px; }
+    .coord { margin-top: 6px; display: flex; flex-direction: column; align-items: flex-start; gap: 20px; }
+    .tel { height: 78px; padding: 0 32px; gap: 22px; }
     .tel span { font-size: 30px; }
-    .autres { gap: 20px; }
+    .autres { gap: 12px; }
+    /* le bloc des formules descend en bas de la colonne : il finit sur la même ligne que le formulaire */
+    .tarifs { margin-top: auto; padding: 28px 28px 20px; }
     .ligne { gap: 20px; font-size: 18px; }
 
     .formulaire { padding: 30px 20px 20px; gap: 20px; }

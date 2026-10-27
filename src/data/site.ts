@@ -16,6 +16,7 @@ export const menu = [
     { label: 'Tous les mariages', href: '/dj-mariage' },
     { label: 'DJ mariage Lyon', href: '/dj-mariage-lyon' },
     { label: 'DJ mariage Besançon', href: '/dj-mariage-besancon' },
+    { label: 'DJ mariage Ain', href: '/dj-mariage-ain' },
   ] },
   { label: 'Anniversaire', href: '/dj-anniversaire' },
   { label: 'Événements', href: '/dj-evenementiel' },

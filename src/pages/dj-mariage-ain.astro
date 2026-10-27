@@ -1,0 +1,73 @@
+---
+// src/pages/dj-mariage-ain.astro — page DJ mariage Ain (adresse : /dj-mariage-ain)
+// Même structure que Lyon et Besançon, textes et communes de l’Ain.
+import Layout from '../layouts/Layout.astro';
+import Hero from '../components/Hero.astro';
+import ZoneVille from '../components/ZoneVille.astro';
+import Deroule from '../components/Deroule.astro';
+import Preparation from '../components/Preparation.astro';
+import Avis from '../components/Avis.astro';
+import Faq from '../components/Faq.astro';
+import CtaDevis from '../components/CtaDevis.astro';
+import { faqMariagePour } from '../data/faq';
+---
+<Layout
+  title="DJ mariage Ain | DJ Tiako, Côtière, Dombes et Bugey"
+  description="DJ mariage dans l’Ain : Côtière, Dombes, Bugey et Bresse. Cérémonie, cocktail, repas et soirée dansante, déplacement inclus depuis Villeurbanne."
+  page="mariage"
+>
+  <Hero
+    zone="ain"
+    h1="DJ Mariage dans l’Ain"
+    image="/images/mariage-hero.webp"
+    intro="À deux pas de l’Ain depuis Villeurbanne, j’anime votre mariage de la Côtière à la Dombes, avec une soirée construite pour vous et vos invités."
+    introCourt="Une soirée à votre image, partout dans l’Ain."
+  >
+    Votre DJ de mariage<br class="br-large" /> <span class="or">au cœur de l’Ain</span>
+  </Hero>
+
+  <ZoneVille
+    eyebrow="DJ mariage dans l’Ain"
+    titre="Votre DJ de la Côtière à la Dombes"
+    paragraphes={[
+      'L’Ain, c’est la porte d’à côté : basé à Villeurbanne, je rejoins en quelques minutes Miribel, Montluel ou Trévoux, et je me déplace dans tout le département pour vos mariages en domaine, en château ou en salle des fêtes.',
+      'Déplacement inclus jusqu’à 70 km aller-retour depuis Villeurbanne ; au-delà, les frais kilométriques sont indiqués dans votre devis.',
+    ]}
+    communes={['Miribel', 'Montluel', 'Meximieux', 'Trévoux', 'Beynost', 'Dagneux', 'Villars-les-Dombes', 'Bourg-en-Bresse']}
+  />
+
+  <Deroule
+    titre="Votre mariage dans l’Ain,"
+    titreOr="un temps fort après l’autre"
+    intro="Cérémonie dans un parc, cocktail au bord d’un étang de la Dombes, soirée dans une grange rénovée : voici comment je vous accompagne, étape par étape."
+    textes={[
+      'Sous les arbres d’un domaine ou dans le jardin d’un château, deux enceintes et deux micros sans fil : vos vœux s’entendent jusqu’au dernier rang.',
+      'Une enceinte sur batterie qui s’installe où se tient le cocktail, même loin de la salle : une musique légère pendant les photos et les retrouvailles.',
+      'Le morceau de votre arrivée, choisi ensemble, et une salle mise en lumière : c’est le signal que la soirée commence.',
+      'Un fond musical entre les plats, des micros prêts pour les discours et les surprises de vos proches, au rythme de votre traiteur.',
+      'Votre première danse, sur votre morceau ou un mashup préparé pour vous, avec jeux de lumière et jets d’étincelles en option.',
+      'Une programmation pensée avec vous, ajustée en direct selon l’énergie de la piste, jusqu’au bout de la nuit.',
+    ]}
+  />
+
+  <Preparation
+    variante="ville"
+    image="/images/mariage-installation.webp"
+    alt="DJ Tiako installé face à la salle de réception"
+    titre="Prêt pour votre lieu, quel qu’il soit"
+    paragraphes={[
+      'Domaines, châteaux, granges : les lieux de réception de l’Ain sont aussi variés que beaux. Avant le jour J, on fait le point ensemble sur le déroulé, vos morceaux incontournables et l’ambiance que vous imaginez.',
+      'Je repère les contraintes de la salle (horaires, voisinage, limiteur de son) et je m’organise avec votre traiteur et votre photographe pour que tout s’enchaîne naturellement.',
+    ]}
+    points={['Déroulement personnalisé', 'Installation adaptée au lieu', 'Coordination avec les intervenants']}
+  />
+
+  <Avis liste="general" />
+  <Faq questions={faqMariagePour('lyon')} />
+  <CtaDevis />
+</Layout>
+
+<style>
+  .br-large { display: none; }
+  @media (min-width: 768px) { .br-large { display: inline; } }
+</style>

@@ -6,7 +6,18 @@ const chiffres: { haut: string; bas: string; basLarge?: string; ico: string }[] 
   { haut: '+320', bas: 'Événements', basLarge: 'Événements réalisés', ico: 'etoile' },
   { haut: '+60', bas: 'Mariages', ico: 'coeur' },
 ];
-const zones = ['Rhône', 'Ain', 'Isère', 'Drôme'];
+// Zone affichée dans la barre « J'interviens… » : départements par défaut,
+// grandes villes sur les pages DJ mariage Lyon / Besançon.
+interface Props { zone?: 'departements' | 'lyon' | 'besancon' | 'ain' }
+const { zone = 'departements' } = Astro.props;
+const ZONES = {
+  departements: { label: 'J’INTERVIENS DANS LE', liste: ['Rhône', 'Ain', 'Isère', 'Drôme'], fin: 'départements voisins' },
+  lyon: { label: 'J’INTERVIENS À', liste: ['Lyon', 'Villeurbanne', 'Villefranche-sur-Saône', 'Vienne'], fin: 'toute la métropole' },
+  besancon: { label: 'J’INTERVIENS À', liste: ['Besançon', 'École-Valentin', 'Ornans', 'Baume-les-Dames'], fin: 'tout le Doubs' },
+  ain: { label: 'J’INTERVIENS À', liste: ['Miribel', 'Montluel', 'Meximieux', 'Trévoux'], fin: 'tout l’Ain' },
+};
+const z = ZONES[zone];
+const zones = z.liste;
 const icones: Record<string, string> = {
   casque: '<path d="M3 14v-2a9 9 0 0 1 18 0v2"/><path d="M21 15a2 2 0 0 1-2 2h-1v-6h1a2 2 0 0 1 2 2zM3 15a2 2 0 0 0 2 2h1v-6H5a2 2 0 0 0-2 2z"/>',
   diplome: '<path d="M2 9.5 12 4.5l10 5-10 5z"/><path d="M6 11.5V16c0 1.5 2.7 3 6 3s6-1.5 6-3v-4.5"/><path d="M22 9.5V15"/>',
@@ -25,8 +36,8 @@ const icones: Record<string, string> = {
   </div>
   <div class="zones">
     <div class="zones-in">
-    <span class="label"><i class="ligne" aria-hidden="true"></i>J’INTERVIENS DANS LE<i class="ligne m" aria-hidden="true"></i></span>
-    <span class="liste">{zones.map((z, i) => <><i class={i === 0 ? 'sep premier' : 'sep'} aria-hidden="true"></i><b>{z}</b></>)}<span class="voisins"><span class="court">et</span><span class="large">Et</span> départements voisins</span></span>
+    <span class="label"><i class="ligne" aria-hidden="true"></i>{z.label}<i class="ligne m" aria-hidden="true"></i></span>
+    <span class="liste">{zones.map((z, i) => <><i class={i === 0 ? 'sep premier' : 'sep'} aria-hidden="true"></i><b>{z}</b></>)}<span class="voisins"><span class="court">et</span><span class="large">Et</span> {z.fin}</span></span>
     <i class="ligne d-fin" aria-hidden="true"></i>
     </div>
   </div>

@@ -47,15 +47,19 @@ const videos = [
       <span class="vide" aria-hidden="true"></span>
       <div class="h-txt">
         <span class="h-eyebrow"><i aria-hidden="true"></i>À propos de DJ Tiako</span>
-        <h1>Une passion pour la musique, des <span class="or">souvenirs</span> pour la vie</h1>
+        <h1>Une passion pour la musique, des <span class="or">souvenirs</span> pour la&nbsp;vie</h1>
         <div class="h-paras">
-          <p>DJ professionnel basé à Lyon, je mets ma passion de la musique au service de vos plus beaux événements&nbsp;: mariages, anniversaires, soirées privées et événements d’entreprises.</p>
-          <p>Mon objectif est simple&nbsp;: créer une ambiance unique, à votre image, et faire de chaque moment un souvenir inoubliable.</p>
+          <p class="long">DJ professionnel basé à Lyon, je mets ma passion de la musique au service de vos plus beaux événements&nbsp;: mariages, anniversaires, soirées privées et événements d’entreprises.</p>
+          <p class="long">Mon objectif est simple&nbsp;: créer une ambiance unique, à votre image, et faire de chaque moment un souvenir inoubliable.</p>
+          <p class="court">DJ basé à Lyon, une ambiance unique à votre image.</p>
         </div>
         <div class="boutons" data-hero-cta>
           <a class="btn btn-dark" href="/devis">DISCUTER DE VOTRE PROJET</a>
           <a class="btn btn-light" href={site.telLien}>{site.telAffiche}</a>
         </div>
+        <a class="lien-video" href="#videos"><span class="v-rond" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5v15l12.5-7.5z"/></svg></span><span class="u">VOIR L’AMBIANCE EN VIDÉO</span>
+          <svg class="bas" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6"/></svg>
+        </a>
       </div>
       <!-- 3 photos : en ligne sur tablette / ordinateur, une par une sur mobile -->
       <div class="photos" data-defile>
@@ -97,7 +101,7 @@ const videos = [
   </section>
 
   <!-- ===== Vidéos ===== -->
-  <section class="videos">
+  <section class="videos" id="videos">
     <div class="container v-wrap">
       <div class="v-tete">
         <span class="eyebrow">Mon univers en vidéo</span>
@@ -172,15 +176,19 @@ const videos = [
       url('/images/apropos-hero-mobile.webp') 60% center / cover no-repeat, #120d08;
   }
   .vide { display: none; }
-  .h-txt { padding: 56px 0 24px; display: flex; flex-direction: column; gap: 16px; }
+  .h-txt { padding: 24px 0 22px; display: flex; flex-direction: column; gap: 16px; }
   .h-eyebrow { display: flex; align-items: center; gap: 12px; font-family: var(--serif); font-size: 22px; color: var(--gold); }
   .h-eyebrow i { width: 32px; height: 1px; background: var(--gold); flex-shrink: 0; }
   h1 { font-size: 32px; line-height: 1.15; }
   .h-paras { display: flex; flex-direction: column; gap: 16px; font-size: 16px; line-height: 1.6; color: rgba(255,255,255,.92); }
+  .h-paras .long { display: none; }
+  /* Même hauteur que le haut de page des autres pages : 556 px mobile, 715 tablette, 700 ordinateur */
+  .h-grille { min-height: 556px; display: flex; flex-direction: column; justify-content: center; }
+  .photos { display: none !important; }
   .boutons { margin-top: 8px; display: flex; flex-direction: column; gap: 12px; }
 
   /* Photos : mobile = une par une */
-  .photos { padding: 8px 0 36px; display: flex; flex-direction: column; gap: 16px; }
+  .photos { padding: 0 0 36px; display: flex; flex-direction: column; gap: 16px; }
   .p-liste { margin: 0; padding: 0; list-style: none; display: flex; gap: 16px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; }
   .p-liste::-webkit-scrollbar { display: none; }
   .p-liste li { flex: 0 0 100%; scroll-snap-align: start; scroll-snap-stop: always; }
@@ -192,6 +200,18 @@ const videos = [
   .fleches { display: flex; gap: 8px; }
   .fl { width: 40px; height: 40px; border-radius: 50%; border: 1px solid #fff; background: transparent; color: #fff; display: flex; align-items: center; justify-content: center; cursor: pointer; }
   .fl:disabled { border-color: rgba(255,255,255,.3); color: rgba(255,255,255,.35); cursor: default; }
+
+
+  /* Lien « Voir l'ambiance en vidéo » : descend jusqu'à la section vidéos */
+  .lien-video { align-self: center; min-height: 48px; display: flex; align-items: center; gap: 12px; text-decoration: none; color: #fff; font-size: 13px; font-weight: 500; letter-spacing: 1px; }
+  .lien-video .u { padding-bottom: 2px; border-bottom: 1px solid rgba(255,255,255,.7); }
+  .v-rond { width: 36px; height: 36px; flex-shrink: 0; border: 1px solid var(--gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--gold); transition: background .15s, color .15s; }
+  .v-rond svg { margin-left: 2px; }
+  .lien-video .bas { color: var(--gold); transition: transform .2s; }
+  .lien-video:hover .v-rond { background: var(--gold); color: var(--ink); }
+  .lien-video:hover .bas { transform: translateY(3px); }
+  .videos { scroll-margin-top: 110px; } /* le titre ne passe pas sous le menu */
+  @media (min-width: 768px) { .lien-video { align-self: flex-start; } }
 
   /* ===== Parcours ===== */
   .parcours { display: flex; flex-direction: column; gap: 32px; }
@@ -250,15 +270,18 @@ const videos = [
         linear-gradient(180deg, rgba(18,13,8,.55) 0%, rgba(18,13,8,.7) 55%, rgba(18,13,8,.9) 100%),
         url('/images/apropos-hero-mobile.webp') center / cover no-repeat, #120d08;
     }
-    .h-txt { padding: 72px 0 8px; gap: 18px; }
+    .h-txt { padding: 60px 0 8px; gap: 18px; }
     .h-eyebrow { font-size: 24px; }
     .h-eyebrow i { width: 40px; }
     h1 { font-size: 34px; }
     .h-paras { gap: 18px; }
+    .h-paras .long { display: block; } .h-paras .court { display: none; }
+    .h-grille { min-height: 715px; }
+    .photos { display: flex !important; }
     .boutons { margin-top: 6px; flex-direction: row; flex-wrap: wrap; }
-    .photos { padding: 32px 0 40px; }
+    .photos { padding: 16px 0 40px; }
     .p-liste { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); overflow: visible; }
-    .p-liste img { height: 150px; }
+    .p-liste img { height: 180px; }
     .nav { display: none; }
 
     .parcours { gap: 40px; }
@@ -297,20 +320,20 @@ const videos = [
     .hero {
       background:
         linear-gradient(90deg, rgba(18,13,8,0) 0%, rgba(18,13,8,0) 28%, rgba(18,13,8,.35) 40%, rgba(18,13,8,.35) 100%),
-        url('/images/apropos-hero.webp') center / cover no-repeat, #120d08;
+        url('/images/apropos-hero.webp') left center / cover no-repeat, #120d08; /* photo d'origine de la maquette */
     }
     /* colonne vide à gauche = la place de Tiako sur la photo */
-    .h-grille { display: grid; grid-template-columns: 445px minmax(0, 1fr); min-height: 642px; padding-left: 0; }
+    .h-grille { display: grid; grid-template-columns: 445px minmax(0, 1fr); min-height: 700px; padding-left: 0; }
     .vide { display: block; grid-row: 1 / 3; }
-    .h-txt { padding: 80px 20px 4px 0; gap: 22px; }
+    .h-txt { padding: 44px 20px 4px 0; gap: 16px; }
     .h-eyebrow { gap: 14px; font-size: 34px; }
     .h-eyebrow i { width: 66px; }
     h1 { font-size: 36px; }
     .h-paras { max-width: 690px; gap: 4px; font-size: 18px; }
     .boutons { margin-top: 0; gap: 20px; }
-    .photos { grid-column: 2; padding: 20px 20px 56px 0; }
+    .photos { grid-column: 2; padding: 12px 20px 40px 0; }
     .p-liste { gap: 40px; }
-    .p-liste img { height: 198px; }
+    .p-liste img { height: 180px; }
 
     .parcours { display: grid; grid-template-columns: minmax(0, 1fr) 1px 695px; gap: 50px; align-items: stretch; }
     .pa-txt { gap: 18px; }

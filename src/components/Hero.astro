@@ -17,8 +17,9 @@ interface Props {
   position?: string;        // cadrage de la photo sur ordinateur (ex. 'center top')
   positionMobile?: string;  // cadrage sur mobile / tablette
   variante?: 'accueil' | 'page';
+  zone?: 'departements' | 'lyon' | 'besancon' | 'ain'; // barre « J'interviens… »
 }
-const { h1, image, intro, introCourt, position = 'center', positionMobile = 'center', variante = 'page' } = Astro.props;
+const { h1, image, intro, introCourt, position = 'center', positionMobile = 'center', variante = 'page', zone = 'departements' } = Astro.props;
 ---
 <section class={`hero ${variante}`} style={`--img: url('${image}'); --pos: ${position}; --pos-m: ${positionMobile};`}>
   <div class="container hero-txt">
@@ -38,7 +39,7 @@ const { h1, image, intro, introCourt, position = 'center', positionMobile = 'cen
     </div>
     <span class="fin-trait" aria-hidden="true"></span>
   </div>
-  <Bandeau />
+  <Bandeau zone={zone} />
 </section>
 
 <style>
