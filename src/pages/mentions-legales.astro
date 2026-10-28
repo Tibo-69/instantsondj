@@ -1,0 +1,31 @@
+---
+// src/pages/mentions-legales.astro — adresse : /mentions-legales
+import Layout from '../layouts/Layout.astro';
+import PageLegale from '../components/PageLegale.astro';
+import { site } from '../data/site';
+
+const blocs = [
+  { titre: 'Éditeur du site', paras: [
+    'Ce site est édité par Thibaud Bermude, entrepreneur individuel (EI), exerçant sous la dénomination Instant Location & Événement et le nom commercial DJ Tiako.',
+    'SIRET : 912 730 637 00028 · RCS Besançon 912 730 637<br />Adresse : 2 rue des Usines, 25320 Montferrand-le-Château',
+    `E-mail : <a href="mailto:${site.email}">${site.email}</a> · Téléphone : <a href="${site.telLien}">${site.telAffiche}</a>`,
+    'TVA non applicable, art. 293 B du CGI.',
+  ] },
+  { titre: 'Directeur de la publication', paras: ['Thibaud Bermude.'] },
+  { titre: 'Hébergement', paras: [
+    'Le site est hébergé par Netlify, Inc., 101 2nd Street, Suite 575, San Francisco, CA 94105, États-Unis · <a href="https://www.netlify.com" target="_blank" rel="noopener">netlify.com</a>.',
+  ] },
+  { titre: 'Propriété intellectuelle', paras: [
+    'L’ensemble des contenus de ce site (textes, photos, vidéos, logo) est la propriété de DJ Tiako ou de leurs auteurs respectifs. Toute reproduction, même partielle, sans autorisation écrite est interdite.',
+  ] },
+  { titre: 'Crédits', paras: [
+    'Photos : DJ Tiako ; Anthéa Photography (mariage au Gîte de la Colombière).',
+  ] },
+  { titre: 'Responsabilité', paras: [
+    'Les informations présentes sur ce site sont données à titre indicatif. Les tarifs et le contenu des prestations sont confirmés par devis.',
+  ] },
+];
+---
+<Layout title="Mentions légales | DJ Tiako" description="Mentions légales du site DJ Tiako : éditeur, hébergement, propriété intellectuelle." page="legal">
+  <PageLegale surTitre="Informations légales" titre="Mentions légales" maj="28 octobre 2026" blocs={blocs} />
+</Layout>

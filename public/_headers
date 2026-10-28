@@ -1,0 +1,5 @@
+# Netlify : mise en cache longue des fichiers qui ne changent pas (site plus rapide en revenant)
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable
+/images/*
+  Cache-Control: public, max-age=2592000

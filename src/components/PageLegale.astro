@@ -1,0 +1,52 @@
+---
+// src/components/PageLegale.astro — trame commune des pages Mentions légales et Confidentialité.
+// Chaque bloc = un titre + un ou plusieurs paragraphes (le HTML simple est accepté : liens, <strong>).
+interface Props {
+  surTitre: string;
+  titre: string;
+  maj: string; // date de dernière mise à jour, ex. « 28 octobre 2026 »
+  blocs: { titre: string; paras: string[] }[];
+}
+const { surTitre, titre, maj, blocs } = Astro.props;
+---
+<section class="bande">
+  <div class="container b-in">
+    <span class="sur"><i aria-hidden="true"></i>{surTitre}</span>
+    <h1>{titre}</h1>
+    <p class="maj">Dernière mise à jour : {maj}</p>
+  </div>
+</section>
+<section class="corps">
+  <div class="container c-in">
+    {blocs.map((b, i) => (
+      <div class="bloc">
+        <h2>{i + 1}. {b.titre}</h2>
+        {b.paras.map((p) => <p set:html={p} />)}
+      </div>
+    ))}
+  </div>
+</section>
+
+<style>
+  .bande { background: var(--cream, #f8f7f4); padding: 40px 0; }
+  .b-in { display: flex; flex-direction: column; gap: 14px; }
+  .sur { display: flex; align-items: center; gap: 14px; font-family: var(--serif); font-size: 20px; color: var(--gold-text); }
+  .sur i { display: block; width: 32px; height: 1px; background: var(--gold); }
+  h1 { font-size: 34px; line-height: 1.1; }
+  .maj { font-size: 14px; color: var(--muted); }
+  .corps { padding: 40px 0 56px; }
+  .c-in { display: flex; flex-direction: column; gap: 28px; }
+  .bloc { max-width: 860px; padding-top: 24px; border-top: 1px solid var(--line); display: flex; flex-direction: column; gap: 12px; }
+  h2 { font-size: 24px; }
+  .bloc p { font-size: 15px; line-height: 1.75; color: var(--text); }
+  .bloc :global(a) { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
+  .bloc :global(a:hover) { color: var(--gold-text); }
+  @media (min-width: 768px) {
+    .bande { padding: 56px 0; } .sur { font-size: 24px; } .sur i { width: 56px; }
+    h1 { font-size: 44px; } h2 { font-size: 26px; } .corps { padding: 56px 0 72px; }
+  }
+  @media (min-width: 1200px) {
+    .bande { padding: 72px 0; } .sur { font-size: 28px; gap: 18px; } .sur i { width: 66px; }
+    h1 { font-size: 52px; } h2 { font-size: 28px; } .bloc p { font-size: 16px; } .corps { padding: 64px 0 96px; }
+  }
+</style>

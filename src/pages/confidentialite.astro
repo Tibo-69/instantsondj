@@ -1,0 +1,37 @@
+---
+// src/pages/confidentialite.astro — adresse : /confidentialite
+import Layout from '../layouts/Layout.astro';
+import PageLegale from '../components/PageLegale.astro';
+import { site } from '../data/site';
+
+const mail = `<a href="mailto:${site.email}">${site.email}</a>`;
+const blocs = [
+  { titre: 'Responsable du traitement', paras: [
+    `Thibaud Bermude (EI Instant Location & Événement, DJ Tiako), 2 rue des Usines, 25320 Montferrand-le-Château · ${mail}.`,
+  ] },
+  { titre: 'Données collectées', paras: [
+    'Via le formulaire de demande de devis : nom et prénom, téléphone, e-mail, type, date et lieu de l’événement, nombre approximatif d’invités, formule souhaitée et votre message.',
+  ] },
+  { titre: 'Finalité et base légale', paras: [
+    'Ces données servent uniquement à répondre à votre demande de devis et à organiser la prestation. Le traitement repose sur les mesures précontractuelles prises à votre demande.',
+  ] },
+  { titre: 'Destinataires', paras: [
+    'Vos données sont destinées à DJ Tiako uniquement. Elles ne sont ni vendues ni cédées.',
+    'Prestataire technique : Netlify, Inc. (hébergement du site et réception du formulaire), qui traite les données pour notre compte.',
+  ] },
+  { titre: 'Durée de conservation', paras: [
+    'Vos données sont conservées 3 ans à compter de notre dernier échange, puis supprimées. Les données liées à une prestation réalisée sont conservées le temps imposé par les obligations comptables.',
+  ] },
+  { titre: 'Vos droits', paras: [
+    `Vous disposez d’un droit d’accès, de rectification, d’effacement, d’opposition, de limitation et de portabilité de vos données. Pour l’exercer, écrivez à ${mail}.`,
+    'Vous pouvez également adresser une réclamation à la CNIL (<a href="https://www.cnil.fr" target="_blank" rel="noopener">cnil.fr</a>).',
+  ] },
+  { titre: 'Cookies et vidéos', paras: [
+    'Ce site n’utilise pas de cookies de suivi ni de mesure d’audience.',
+    'Les vidéos de la page À propos sont hébergées par YouTube, en mode « confidentialité renforcée ». Elles ne se chargent que lorsque vous cliquez dessus : YouTube peut alors déposer des cookies, selon sa propre politique de confidentialité.',
+  ] },
+];
+---
+<Layout title="Politique de confidentialité | DJ Tiako" description="Comment DJ Tiako traite les données envoyées via le formulaire de devis, et vos droits." page="legal">
+  <PageLegale surTitre="Vos données" titre="Politique de confidentialité" maj="28 octobre 2026" blocs={blocs} />
+</Layout>

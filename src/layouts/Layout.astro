@@ -11,6 +11,9 @@ import '@fontsource/schibsted-grotesk/400.css';
 import '@fontsource/schibsted-grotesk/500.css';
 import '@fontsource/schibsted-grotesk/600.css';
 import '../styles/global.css';
+// Les 2 polices les plus utilisées sont préchargées (le texte s'affiche plus vite)
+import sg400 from '@fontsource/schibsted-grotesk/files/schibsted-grotesk-latin-400-normal.woff2?url';
+import cg400 from '@fontsource/cormorant-garamond/files/cormorant-garamond-latin-400-normal.woff2?url';
 
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
@@ -21,8 +24,9 @@ interface Props {
   description: string;    // meta description (≈ 155 caractères max)
   page?: string;          // page active dans le menu : 'mariage', 'tarifs'…
   noindex?: boolean;      // true pour la page 404
+  preload?: string;       // grande image du haut de page, chargée en priorité
 }
-const { title, description, page = '', noindex = false } = Astro.props;
+const { title, description, page = '', noindex = false, preload } = Astro.props;
 const url = new URL(Astro.url.pathname, Astro.site);
 ---
 <!doctype html>
@@ -33,6 +37,9 @@ const url = new URL(Astro.url.pathname, Astro.site);
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={url} />
+    <link rel="preload" href={sg400} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={cg400} as="font" type="font/woff2" crossorigin />
+    {preload && <link rel="preload" href={preload} as="image" fetchpriority="high" />}
     {noindex && <meta name="robots" content="noindex" />}
 
     <!-- Aperçu de partage (WhatsApp, Facebook…) -->
@@ -42,10 +49,13 @@ const url = new URL(Astro.url.pathname, Astro.site);
     <meta property="og:description" content={description} />
     <meta property="og:url" content={url} />
     <meta property="og:image" content={new URL('/og-image.jpg', Astro.site)} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
     <meta name="twitter:card" content="summary_large_image" />
 
-    <!-- Favicon (à exporter depuis la maquette) -->
+    <!-- Favicon -->
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <meta name="theme-color" content="#141110" />
   </head>

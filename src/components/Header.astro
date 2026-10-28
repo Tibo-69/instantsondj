@@ -34,7 +34,7 @@ const actif = (href: string) => Astro.url.pathname.startsWith(href) && href !== 
         ))}
       </ul>
     </nav>
-    <a class="btn btn-dark cta-desktop" href="/devis">DEMANDER UN DEVIS</a>
+    <a class="btn btn-gold cta-desktop" href="/devis">DEMANDER UN DEVIS</a>
 
     <!-- Menu mobile / tablette -->
     <details class="nav-mobile">
@@ -52,7 +52,7 @@ const actif = (href: string) => Astro.url.pathname.startsWith(href) && href !== 
           ))}
         </nav>
         <div class="m-cta">
-          <a class="btn btn-dark" href="/devis">DEMANDER UN DEVIS</a>
+          <a class="btn btn-gold" href="/devis">DEMANDER UN DEVIS</a>
           <a class="btn btn-outline" href={site.telLien}>{site.telAffiche}</a>
         </div>
       </div>

@@ -1,4 +1,5 @@
 ---
+import { site } from '../data/site';
 // src/components/Avis.astro — « Ils m'ont fait confiance ».
 // Utilisation : <Avis liste="general" />  (ou "lyon", "besancon")
 // Les avis longs se déplient avec <details> : pas de JavaScript.
@@ -43,7 +44,7 @@ const LONG = 170; // au-delà de ce nombre de caractères, on coupe avec « Lire
 
     <div class="google">
       <span class="note"><i class="l" aria-hidden="true"></i><b class="g">G</b> 5,0 <span class="etoiles" aria-label="5 étoiles sur 5">★★★★★</span><i class="l" aria-hidden="true"></i></span>
-      <a class="btn btn-outline" href="#" target="_blank" rel="noopener"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M14 3h7v7M21 3l-9 9M19 14v6a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h6"/></svg>VOIR TOUS LES AVIS GOOGLE ⟶</a>
+      <a class="btn btn-outline" href={site.avisGoogle} target="_blank" rel="noopener"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M14 3h7v7M21 3l-9 9M19 14v6a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h6"/></svg>VOIR TOUS LES AVIS GOOGLE ⟶</a>
       <!-- TODO : remplacer # par le lien de la fiche Google de Tibo -->
     </div>
   </div>

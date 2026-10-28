@@ -7,6 +7,8 @@ export const site = {
   email: 'tibobermude@gmail.com',
   instagram: 'https://www.instagram.com/dj_tiako/',
   whatsapp: 'https://wa.me/33619845926',
+  // Fiche Google (avis) — lien court vers la fiche « Instant Son DJ Lyon »
+  avisGoogle: 'https://maps.google.com/?cid=11659906207763856674',
   zones: ['Lyon', 'Villeurbanne', 'Rhône (69)', 'Ain (01)', 'Isère (38)', 'Drôme (26)', 'Loire (42)', 'Ardèche (07)', 'Besançon', 'Doubs (25)'],
 };
 

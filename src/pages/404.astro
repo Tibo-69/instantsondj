@@ -1,0 +1,59 @@
+---
+// src/pages/404.astro — page affichée quand une adresse n'existe pas (Netlify l'utilise tout seul).
+import Layout from '../layouts/Layout.astro';
+const liens = [
+  { label: 'Mariage', href: '/dj-mariage' },
+  { label: 'Anniversaire', href: '/dj-anniversaire' },
+  { label: 'Événements', href: '/dj-evenementiel' },
+  { label: 'Tarifs', href: '/tarifs' },
+];
+---
+<Layout title="Page introuvable | DJ Tiako" description="Cette page n’existe pas ou a été déplacée." noindex>
+  <section class="nf">
+    <div class="container nf-in">
+      <span class="code" aria-hidden="true">404</span>
+      <span class="sur"><i aria-hidden="true"></i>Page introuvable</span>
+      <h1>Oups, ce morceau n’est pas <span class="or">dans la playlist</span></h1>
+      <p>La page que vous cherchez n’existe pas ou a été déplacée. Pas de panique, la soirée continue&nbsp;!</p>
+      <div class="boutons">
+        <a class="btn btn-dark" href="/">RETOUR À L’ACCUEIL</a>
+        <a class="btn btn-gold" href="/devis">DEMANDER UN DEVIS</a>
+      </div>
+      <nav class="liens" aria-label="Pages principales">
+        <span>Ou découvrez&nbsp;:</span>
+        {liens.map((l) => <a href={l.href}>{l.label}</a>)}
+      </nav>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .nf { color: #fff; background: linear-gradient(180deg, rgba(18,13,9,.75) 0%, rgba(18,13,9,.9) 100%), url('/images/hero-accueil.webp') center top / cover no-repeat, #120d09; padding: 56px 0; }
+  .nf-in { display: flex; flex-direction: column; gap: 18px; }
+  .code { font-family: var(--serif); font-size: 96px; line-height: .9; color: var(--gold); }
+  .sur { display: flex; align-items: center; gap: 12px; font-family: var(--serif); font-size: 22px; color: var(--gold); }
+  .sur i { display: block; width: 32px; height: 1px; background: var(--gold); }
+  h1 { font-size: 36px; line-height: 1.05; }
+  .or { color: var(--gold); }
+  p { font-size: 16px; line-height: 1.6; color: rgba(255,255,255,.92); }
+  .boutons { margin-top: 6px; display: flex; flex-direction: column; gap: 12px; }
+  .liens { margin-top: 8px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,.2); display: flex; flex-wrap: wrap; align-items: center; gap: 0 20px; font-size: 14px; }
+  .liens span { width: 100%; color: rgba(255,255,255,.7); }
+  .liens a { min-height: 44px; display: flex; align-items: center; color: #fff; text-decoration: none; }
+  .liens a:hover { color: var(--gold); }
+  @media (min-width: 768px) {
+    .nf { padding: 80px 0; background: linear-gradient(90deg, rgba(18,13,9,.92) 0%, rgba(18,13,9,.7) 45%, rgba(18,13,9,.3) 100%), url('/images/hero-accueil.webp') center top / cover no-repeat, #120d09; }
+    .nf-in > * { max-width: 680px; }
+    .code { font-size: 130px; } .sur { font-size: 26px; } .sur i { width: 48px; }
+    h1 { font-size: 48px; } p { font-size: 17px; }
+    .boutons { flex-direction: row; }
+    .liens span { width: auto; }
+  }
+  @media (min-width: 1200px) {
+    .nf { min-height: 640px; display: flex; align-items: center; }
+    .nf-in { width: 100%; gap: 22px; }
+    .nf-in > * { max-width: 760px; }
+    .code { font-size: 160px; } .sur { font-size: 30px; } .sur i { width: 66px; }
+    h1 { font-size: 58px; } p { font-size: 18px; }
+  }
+</style>

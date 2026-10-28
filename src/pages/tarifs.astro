@@ -64,7 +64,7 @@ const options = [
         {packs.map((p) => (
           <article class={`pack ${p.populaire ? 'populaire' : ''}`}>
             {p.populaire && <span class="badge">LE PLUS CHOISI</span>}
-            <img src={p.img} alt={p.alt} loading="lazy" />
+            <div class="p-photo"><img src={p.img} alt={p.alt} loading="lazy" /></div>
             <div class="p-tete">
               <h2>{p.nom}</h2>
               <span class="public">{p.public}</span>
@@ -145,7 +145,17 @@ const options = [
   .packs { display: flex; flex-direction: column; gap: 28px; }
   .pack { position: relative; border: 1px solid var(--card-line); border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; }
   .badge { position: absolute; top: 0; left: 50%; transform: translateX(-50%); padding: 10px 22px; background: var(--gold); border-radius: 0 0 8px 8px; color: #fff; font-size: 14px; letter-spacing: .5px; white-space: nowrap; }
-  .pack img { width: 100%; height: 180px; object-fit: cover; }
+  /* Cadre photo identique sur les 3 cartes (même largeur, même hauteur) : la photo reste dedans */
+  .p-photo { height: 180px; overflow: hidden; }
+  .pack img { display: block; width: 100%; height: 100%; object-fit: cover; }
+  /* Cadrage des 3 photos : photos entières, enceintes à la même hauteur sur les 3 cartes.
+     Party et Prestige sont au même format que le cadre (rien à recadrer).
+     Élégance est plus haute : on la cale pour que ses enceintes tombent au même niveau. */
+  .pack img { object-position: 50% 50%; }
+  .populaire img { object-position: 50% 12%; }
+  /* Prestige : enceintes plus petites et plus basses sur la photo → léger zoom (×1,12) calé en haut
+     pour que leur haut et leur bas tombent au niveau des deux autres. */
+  .pack:last-child img { transform: scale(1.12); transform-origin: 50% 22%; }
   .p-tete { padding: 24px 22px 0; display: flex; flex-direction: column; gap: 12px; }
   .pack h2 { font-size: 32px; }
   .public { font-size: 15px; color: #555; }
@@ -183,7 +193,7 @@ const options = [
     /* photo à gauche + nom/prix à droite, puis le matériel sur 2 colonnes */
     .pack { display: grid; grid-template-columns: 260px minmax(0, 1fr); }
     .badge { left: 130px; font-size: 14px; }
-    .pack img { height: 200px; }
+    .p-photo { height: 200px; }
     .p-tete { padding: 26px 28px; justify-content: center; gap: 8px; }
     .pack h2 { font-size: 34px; }
     .public { font-size: 16px; }
@@ -215,7 +225,7 @@ const options = [
     .packs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 34px; align-items: stretch; }
     .pack { display: flex; }
     .badge { left: 50%; padding: 12px 28px; font-size: 16px; }
-    .pack img { height: 226px; }
+    .p-photo { height: 226px; }
     .p-tete { padding: 32px 32px 0; justify-content: flex-start; gap: 16px; }
     .pack h2 { font-size: 40px; }
     .public { font-size: 17px; }

@@ -88,10 +88,13 @@ p { margin: 0; }
 }
 .btn-dark { background: var(--ink); color: #fff; border-color: #8c6a3e; }
 .btn-dark:hover { background: var(--gold); color: var(--ink); }
+/* Bouton beige-doré : tous les « Demander un devis » */
+.btn-gold { background: var(--gold); color: var(--ink); border-color: var(--gold); font-weight: 600; }
+.btn-gold:hover { background: #c9944f; border-color: #c9944f; color: var(--ink); }
 .btn-light { background: transparent; color: #fff; border-color: #fff; }
 .btn-light:hover { border-color: var(--gold); color: var(--gold); }
 .btn-outline { background: transparent; color: var(--ink); border-color: var(--ink); }
-.btn-outline:hover { background: var(--ink); color: #fff; }
+.btn-outline:hover { border-color: var(--gold); color: #7a5726; }
 
 /* Lien flèche « EN SAVOIR PLUS ⟶ » */
 .link-arrow {

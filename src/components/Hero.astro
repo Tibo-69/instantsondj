@@ -72,6 +72,12 @@ const { h1, image, intro, introCourt, position = 'center', positionMobile = 'cen
   .formules:hover .fl { transform: translateX(4px); }
   .boutons { margin-top: 18px; display: flex; flex-direction: column; gap: 10px; }
 
+  /* Petits téléphones (≤ 380 px) : on resserre un peu pour garder la même hauteur partout */
+  @media (max-width: 380px) {
+    .accroche { font-size: 32px; }
+    .intro { font-size: 15px; letter-spacing: -.1px; }
+  }
+
   /* --- Tablette --- */
   @media (min-width: 768px) {
     .hero {
