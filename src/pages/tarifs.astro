@@ -86,6 +86,20 @@ const options = [
     </div>
   </section>
 
+  <!-- ===== Voir l'ambiance en vidéo ===== -->
+  <section class="ambiance">
+    <div class="container">
+      <div class="amb-in">
+        <div class="amb-txt">
+          <span class="amb-sur"><i class="l" aria-hidden="true"></i>En vidéo<i class="l l-m" aria-hidden="true"></i></span>
+          <h2>Voir l’ambiance<br class="br-amb" /> avant de choisir</h2>
+          <p>Des extraits de mariages et de soirées, pour vous faire une idée du son et de l’éclairage.</p>
+        </div>
+        <a class="amb-lien" href="/a-propos#videos"><span class="v-rond" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5v15l12.5-7.5z"/></svg></span><span class="u">VOIR L’AMBIANCE EN VIDÉO</span></a>
+      </div>
+    </div>
+  </section>
+
   <!-- ===== Options ===== -->
   <section class="section bg-cream">
     <div class="container f-wrap">
@@ -215,5 +229,37 @@ const options = [
     .options { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 34px; }
     .option img { height: 248px; }
     .o-txt { padding: 28px 30px 32px; gap: 12px; }
+  }
+
+  /* --- Voir l'ambiance (sous les formules) --- */
+  .ambiance { padding-bottom: 56px; }
+  .amb-in { padding: 40px 0; border-top: 1px solid var(--card-line); border-bottom: 1px solid var(--card-line); display: flex; flex-direction: column; align-items: center; gap: 24px; text-align: center; }
+  .amb-txt { display: flex; flex-direction: column; align-items: center; gap: 14px; }
+  .amb-sur { display: flex; align-items: center; gap: 14px; font-family: var(--serif); font-size: 20px; color: var(--gold-text); }
+  .amb-sur .l { display: block; width: 32px; height: 1px; background: var(--gold); }
+  .ambiance h2 { font-size: 30px; line-height: 1.1; }
+  .ambiance p { max-width: 560px; font-size: 15px; line-height: 1.6; color: var(--text); }
+  .amb-lien { min-height: 48px; display: flex; align-items: center; gap: 16px; text-decoration: none; color: var(--ink); font-size: 13px; font-weight: 500; letter-spacing: 1px; }
+  .amb-lien .v-rond { width: 52px; height: 52px; flex-shrink: 0; border: 1px solid var(--gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--gold-text); transition: background .2s, color .2s; }
+  .amb-lien .v-rond svg { margin-left: 3px; }
+  .amb-lien .u { padding-bottom: 2px; border-bottom: 1px solid currentColor; }
+  .amb-lien:hover { color: var(--gold-text); }
+  .amb-lien:hover .v-rond { background: var(--gold); color: var(--ink); }
+  @media (min-width: 768px) {
+    .ambiance { padding-bottom: 72px; }
+    .amb-in { padding: 48px 0; flex-direction: row; justify-content: space-between; gap: 28px; text-align: left; }
+    .amb-txt { align-items: flex-start; }
+    .amb-sur { font-size: 24px; } .amb-sur .l { width: 48px; } .amb-sur .l-m { display: none; }
+    .ambiance h2 { font-size: 32px; }
+    .ambiance p { font-size: 16px; }
+    .amb-lien { flex-shrink: 0; } .amb-lien .v-rond { width: 56px; height: 56px; }
+  }
+  @media (min-width: 1200px) {
+    .ambiance { padding-bottom: 96px; }
+    .amb-in { padding: 56px 0; gap: 48px; }
+    .amb-sur { font-size: 28px; } .amb-sur .l { width: 66px; }
+    .ambiance h2 { font-size: 44px; } .br-amb { display: none; }
+    .ambiance p { font-size: 18px; }
+    .amb-lien .v-rond { width: 64px; height: 64px; }
   }
 </style>

@@ -27,13 +27,17 @@ const parcours = [
   { annee: '2025', titre: 'Un nouveau chapitre à Lyon', texte: 'Je me tourne vers les scènes publiques lyonnaises', ico: 'barres' },
 ];
 
-// TODO : remplacer les liens Instagram par les vraies vidéos de Tibo quand on les aura.
-const videos = [
-  { titre: 'Live set — soirée privée', tag: 'LIVE', img: '/images/apropos-set.webp' },
-  { titre: 'Ouverture du bal', tag: 'MARIAGE', img: '/images/option-etincelles.webp' },
-  { titre: 'Soirée d’entreprise', tag: 'ÉVÉNEMENT', img: '/images/evenements-entreprise.webp' },
-  { titre: 'La piste est pleine', tag: 'ANNIVERSAIRE', img: '/images/apropos-salle.webp' },
-  { titre: 'Mix en extérieur', tag: 'LIVE', img: '/images/apropos-exterieur.webp' },
+// Vidéos YouTube de Tibo (en « non répertoriée »). Pour en changer une :
+// remplacer l'id (la partie après « v= » dans le lien YouTube), le titre ou le style.
+// La 1re vidéo est celle du grand lecteur au départ. Les vignettes viennent de YouTube.
+// Cadrage : les images sont calées pour garder le visage de Tibo (centré, partie haute).
+// Si une image est mal cadrée, ajouter pos: '50% 20%' (2e chiffre plus petit = on remonte).
+const videos: { id: string; titre: string; tag: string; pos?: string }[] = [
+  { id: 'Z9j1iUqqSvw', titre: 'International Love x DJ Got Us', tag: 'POP · CLUB' },
+  { id: 'FLf9OmpTSIA', titre: 'Justin Bieber x Black Eyed Peas', tag: 'POP · ÉLECTRO' },
+  { id: 'Rt49slKKRo8', titre: 'Leftside x Charly Black x Konshens', tag: 'DANCEHALL' },
+  { id: 'Y3ObaNZuhzA', titre: 'Gims & Tal', tag: 'POP · FR' },
+  { id: 'CssJHqwqbVY', titre: 'APT x Melodrama', tag: 'POP · HITS' },
 ];
 ---
 <Layout
@@ -108,10 +112,14 @@ const videos = [
         <h2 class="titre">Plongez dans l’ambiance</h2>
         <p>Quelques vidéos pour découvrir mon univers, mon énergie et ma manière de faire vivre mes sets.</p>
       </div>
-      <div class="v-grille">
+      <!-- Grand lecteur + vignettes : un clic sur une vignette la lance dans le grand lecteur,
+           sans fenêtre. La vidéo YouTube ne se charge qu'au clic. -->
+      <div class="v-grille" data-videos>
         {videos.map((v, i) => (
-          <a class={`tuile t${i + 1}`} href={site.instagram} target="_blank" rel="noopener" aria-label={`Voir la vidéo « ${v.titre} » sur Instagram`}>
-            <img src={v.img} alt="" loading="lazy" />
+          <a class={`tuile t${i + 1}`} href={`https://www.youtube.com/watch?v=${v.id}`} target="_blank" rel="noopener"
+             data-yt={v.id} data-titre={v.titre} data-tag={v.tag} data-pos={v.pos ?? ''} aria-label={`Lire la vidéo « ${v.titre} »`}>
+            <img src={`https://i.ytimg.com/vi/${v.id}/${i === 0 ? 'maxresdefault' : 'hqdefault'}.jpg`} alt="" loading="lazy" style={v.pos ? `object-position: ${v.pos}` : undefined}
+                 onerror="if(!this.dataset.r){this.dataset.r=1;this.src=this.src.replace('maxresdefault','hqdefault')}" />
             <span class="voile" aria-hidden="true"></span>
             <span class="tag">{v.tag}</span>
             <span class="lecture" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5v15l12.5-7.5z"/></svg></span>
@@ -119,6 +127,7 @@ const videos = [
           </a>
         ))}
       </div>
+      <p class="v-note">Vidéos hébergées par YouTube, chargées uniquement au clic.</p>
     </div>
   </section>
 
@@ -161,6 +170,46 @@ const videos = [
     suiv.addEventListener('click', () => aller(actuel + 1));
     liste.addEventListener('scroll', () => requestAnimationFrame(maj), { passive: true });
     maj();
+  });
+</script>
+
+<script>
+  // Vidéos : la 1re vignette est le grand lecteur. Clic sur le grand → la vidéo démarre dedans.
+  // Clic sur une petite vignette → elle échange sa place avec le grand lecteur et démarre.
+  document.querySelectorAll<HTMLElement>('[data-videos]').forEach((grille) => {
+    const grand = grille.querySelector<HTMLAnchorElement>('.t1')!;
+    const thumb = (id: string, big: boolean) => `https://i.ytimg.com/vi/${id}/${big ? 'maxresdefault' : 'hqdefault'}.jpg`;
+    const remplir = (el: HTMLAnchorElement, d: DOMStringMap, big: boolean) => {
+      el.dataset.yt = d.yt; el.dataset.titre = d.titre; el.dataset.tag = d.tag; el.dataset.pos = d.pos || '';
+      el.href = `https://www.youtube.com/watch?v=${d.yt}`;
+      el.setAttribute('aria-label', `Lire la vidéo « ${d.titre} »`);
+      const img = el.querySelector('img')!; delete img.dataset.r; img.src = thumb(d.yt!, big); img.style.objectPosition = d.pos || '';
+      el.querySelector('.tag')!.textContent = d.tag || '';
+      el.querySelector('.v-titre')!.textContent = d.titre || '';
+    };
+    const lancer = () => {
+      grand.querySelector('iframe')?.remove();
+      const f = document.createElement('iframe');
+      f.src = `https://www.youtube-nocookie.com/embed/${grand.dataset.yt}?autoplay=1&rel=0&playsinline=1`;
+      f.title = grand.dataset.titre || 'Vidéo DJ Tiako';
+      f.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen';
+      f.allowFullscreen = true;
+      grand.appendChild(f);
+      grand.classList.add('joue');
+    };
+    grille.querySelectorAll<HTMLAnchorElement>('.tuile').forEach((t) => {
+      t.addEventListener('click', (e) => {
+        e.preventDefault();
+        if (t !== grand) {
+          const ancien = { ...grand.dataset }, nouveau = { ...t.dataset };
+          remplir(grand, nouveau, true);
+          remplir(t, ancien, false);
+          // sur mobile, on remonte au lecteur
+          if (grand.getBoundingClientRect().top < 0) grand.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        } else if (grand.classList.contains('joue')) return;
+        lancer();
+      });
+    });
   });
 </script>
 
@@ -239,7 +288,7 @@ const videos = [
   .v-grille { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: 210px 120px 120px; gap: 12px; }
   .tuile { position: relative; overflow: hidden; border-radius: 8px; background: var(--night); color: #fff; text-decoration: none; }
   .t1 { grid-column: 1 / 3; }
-  .tuile img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform .4s; }
+  .tuile img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; transition: transform .4s; }
   .voile { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(10,8,6,.05) 0%, rgba(10,8,6,.15) 50%, rgba(10,8,6,.8) 100%); }
   .tag { position: absolute; top: 12px; left: 12px; padding: 5px 10px; border-radius: 4px; background: rgba(17,17,17,.7); font-size: 11px; letter-spacing: 1px; }
   .lecture { position: absolute; top: 50%; left: 50%; width: 40px; height: 40px; transform: translate(-50%, -50%); border: 1px solid var(--gold); border-radius: 50%; background: rgba(17,17,17,.55); color: var(--gold); display: flex; align-items: center; justify-content: center; transition: transform .2s, background .2s, color .2s; }
@@ -367,4 +416,10 @@ const videos = [
     .i-btn { grid-column: auto; height: 44px; }
     .i-wrap > p { font-size: 18px; }
   }
+
+  /* --- Lecteur vidéo intégré --- */
+  .tuile :global(iframe) { position: absolute; inset: 0; z-index: 2; width: 100%; height: 100%; border: 0; background: #000; }
+  .tuile.joue { cursor: default; }
+  .tuile.joue:hover img { transform: none; }
+  .v-note { margin-top: -4px; font-size: 12px; color: var(--muted); }
 </style>

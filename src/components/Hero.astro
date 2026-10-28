@@ -37,7 +37,7 @@ const { h1, image, intro, introCourt, position = 'center', positionMobile = 'cen
       <a class="btn btn-dark" href="/devis">DISCUTER DE VOTRE PROJET</a>
       <a class="btn btn-light" href={site.telLien}>{site.telAffiche}</a>
     </div>
-    <span class="fin-trait" aria-hidden="true"></span>
+    <a class="formules" href="/tarifs"><span class="u">DÉCOUVRIR LES FORMULES</span><span class="fl" aria-hidden="true">→</span></a>
   </div>
   <Bandeau zone={zone} />
 </section>
@@ -63,7 +63,13 @@ const { h1, image, intro, introCourt, position = 'center', positionMobile = 'cen
      même si le texte est un peu plus court (1 ligne mobile, 3 tablette, 2 ordinateur). */
   .intro { margin-top: 16px; font-size: 16px; line-height: 1.6; min-height: 1.6em; color: rgba(255,255,255,.92); }
   .long { display: none; }
-  .fin-trait { display: none; }
+  /* Petit lien vers les tarifs, sous les boutons */
+  .formules { margin-top: 16px; min-height: 32px; display: flex; justify-content: center; align-items: center; gap: 10px; color: #fff; text-decoration: none; font-size: 12px; font-weight: 500; letter-spacing: 1px; }
+  .formules .u { padding-bottom: 2px; border-bottom: 1px solid rgba(255,255,255,.7); }
+  .formules .fl { color: var(--gold); transition: transform .2s; }
+  .formules:hover { color: var(--gold); }
+  .formules:hover .u { border-color: var(--gold); }
+  .formules:hover .fl { transform: translateX(4px); }
   .boutons { margin-top: 18px; display: flex; flex-direction: column; gap: 10px; }
 
   /* --- Tablette --- */
@@ -83,6 +89,7 @@ const { h1, image, intro, introCourt, position = 'center', positionMobile = 'cen
     .intro { margin-top: 24px; font-size: 17px; min-height: 4.8em; }
     .long { display: inline; } .court { display: none; }
     .boutons { margin-top: 32px; flex-direction: row; flex-wrap: wrap; gap: 16px; }
+    .formules { margin-top: 22px; justify-content: flex-start; font-size: 13px; width: max-content; }
   }
 
   /* --- Ordinateur --- */
@@ -100,6 +107,5 @@ const { h1, image, intro, introCourt, position = 'center', positionMobile = 'cen
     .intro { margin-top: 28px; font-size: 18px; max-width: 560px; min-height: 3.2em; }
     .accueil .intro { max-width: 760px; }
     .boutons { margin-top: 40px; gap: 20px; }
-    .fin-trait { display: block; margin-top: 20px; width: 66px; height: 1px; background: rgba(255,255,255,.6); }
   }
 </style>
