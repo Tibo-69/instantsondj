@@ -25,8 +25,9 @@ interface Props {
   page?: string;          // page active dans le menu : 'mariage', 'tarifs'…
   noindex?: boolean;      // true pour la page 404
   preload?: string;       // grande image du haut de page, chargée en priorité
+  preloadMobile?: string; // image du haut de page sur téléphone (si différente)
 }
-const { title, description, page = '', noindex = false, preload } = Astro.props;
+const { title, description, page = '', noindex = false, preload, preloadMobile } = Astro.props;
 const url = new URL(Astro.url.pathname, Astro.site);
 ---
 <!doctype html>
@@ -39,7 +40,9 @@ const url = new URL(Astro.url.pathname, Astro.site);
     <link rel="canonical" href={url} />
     <link rel="preload" href={sg400} as="font" type="font/woff2" crossorigin />
     <link rel="preload" href={cg400} as="font" type="font/woff2" crossorigin />
-    {preload && <link rel="preload" href={preload} as="image" fetchpriority="high" />}
+    {preload && !preloadMobile && <link rel="preload" href={preload} as="image" fetchpriority="high" />}
+    {preload && preloadMobile && <link rel="preload" href={preload} as="image" fetchpriority="high" media="(min-width: 768px)" />}
+    {preloadMobile && <link rel="preload" href={preloadMobile} as="image" fetchpriority="high" media="(max-width: 767px)" />}
     {noindex && <meta name="robots" content="noindex" />}
 
     <!-- Aperçu de partage (WhatsApp, Facebook…) -->

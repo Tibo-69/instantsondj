@@ -18,10 +18,11 @@ interface Props {
   positionMobile?: string;  // cadrage sur mobile / tablette
   variante?: 'accueil' | 'page';
   zone?: 'departements' | 'lyon' | 'besancon' | 'ain'; // barre « J'interviens… »
+  imageMobile?: string;     // image en hauteur affichée seulement sur téléphone (thème de la page)
 }
-const { h1, image, intro, introCourt, position = 'center', positionMobile = 'center', variante = 'page', zone = 'departements' } = Astro.props;
+const { h1, image, intro, introCourt, position = 'center', positionMobile = 'center', variante = 'page', zone = 'departements', imageMobile } = Astro.props;
 ---
-<section class={`hero ${variante}`} style={`--img: url('${image}'); --pos: ${position}; --pos-m: ${positionMobile};`}>
+<section class={`hero ${variante} ${imageMobile ? 'theme-m' : ''}`} style={`--img: url('${image}'); --pos: ${position}; --pos-m: ${positionMobile};${imageMobile ? ` --img-m: url('${imageMobile}');` : ''}`}>
   <div class="container hero-txt">
     <div class="h1-ligne">
       <span class="trait" aria-hidden="true"></span>
@@ -48,6 +49,15 @@ const { h1, image, intro, introCourt, position = 'center', positionMobile = 'cen
     background:
       linear-gradient(180deg, rgba(20,15,10,.55) 0%, rgba(20,15,10,.75) 60%, rgba(20,15,10,.9) 100%),
       var(--img) var(--pos-m) / cover no-repeat, #140f0a;
+  }
+  /* Téléphone : image à thème (en hauteur), voile noir léger, ombre sous le texte */
+  @media (max-width: 767px) {
+    .theme-m {
+      background:
+        linear-gradient(180deg, rgba(10,8,6,.58) 0%, rgba(10,8,6,.72) 45%, rgba(10,8,6,.9) 100%),
+        var(--img-m) center top / cover no-repeat, #0a0806;
+    }
+    .theme-m h1, .theme-m .accroche, .theme-m .intro { text-shadow: 0 2px 12px rgba(0,0,0,.65); }
   }
   /* Toutes les pages ont la même trame (titre doré, phrase sur 2 lignes, texte, boutons)
      donc la même hauteur et le titre doré toujours au même endroit. */
